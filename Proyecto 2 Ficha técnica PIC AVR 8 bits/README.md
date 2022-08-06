@@ -7,3 +7,4 @@ Crear cuaderno PDF de la carpeta “Estructura del controlador AVR de 8 bits”
 Crear cuaderno PDF de la carpeta “Periféricos AVR de 8 bits” 
 
 
+Crear cuaderno pdf de la careta "Referencia de la gama media mejorada"
