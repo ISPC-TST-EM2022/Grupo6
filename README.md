@@ -1,6 +1,10 @@
 # Grupo6
 Grupo para la practica anual de la materia Electronica Microcontrolada
 
+Profesores:
+- Jorge Morales.
+- Gonzalo Vera.
+
 Integrantes: GitHub:
 - Guzmán, Lilén https://github.com/lilenguzman01
 - López, Maximiliano https://github.com/Maxilopez28
