@@ -10,5 +10,5 @@ Integrantes: GitHub:
 - López, Maximiliano https://github.com/Maxilopez28
 - Moyano, Emilio https://github.com/TerraWolf
 - Muguruza, Sergio https://github.com/sergiomuguruza
-- Ramos, Marina https://github.com/MarinaSR11
+- Gonzalez, Mario https://github.com/
 - Ripoli, Enrique https://github.com/enriqueripoli
