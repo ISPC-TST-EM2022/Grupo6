@@ -37,6 +37,11 @@ void derecha(){ // declaramos funcion para ir derecha
   digitalWrite(Dire2, HIGH);
 }
 
+void Suscribe_MQTT(){
+  client.subscribe("/grupo6/app/");
+  // client.subscribe(ID+topico);
+}
+
 void setup()
 {
   Serial.begin(9600);         // iniciamos serial a 9600 para velocidad de depuracion de errores
@@ -53,11 +58,15 @@ void setup()
   client.setServer(mqttServer, mqttPort); // me conecto al broker
   while (!client.connected())             // bucle de espera hasta conexion exitoas
   {
+        String clientId = "Grupo6"; // cargo nombre de usuario
+    clientId += String(random(0xffff), HEX); // sumo al usuario numero random para que me acepte broker
+
     Serial.println("Conectando al broker MQTT...");
-    if (client.connect("Grupo6_Auto_de_prueba", mqttUser, mqttPassword)) // usuario broker
+    if (client.connect(clientId.c_str())){ // usuario broker random ante caidas
       Serial.println("Conectado !!!");
-    else
-    {
+      Serial.print("Usuario :");
+      Serial.print(clientId.c_str());
+  }else{
       Serial.print("Fallo en la conexion"); // en caso de no conectarse
       Serial.print(client.state());         // publico por el serial es estado de la conexion al broker
       delay(2000);
@@ -71,5 +80,16 @@ void setup()
 }
 
 void loop(){
+
+
+
+
+
+
+
+
+
+
+
 
 }
