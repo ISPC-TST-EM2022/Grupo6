@@ -6,12 +6,14 @@ int Dire1 = 12;                                       // pin de puente H manejo 
 int Dire2 = 11;                                       // pin de puente H manejo de direccion Mecanica
 int Velocidad = 10;                                   // manejo de velocidad por PWM al puente H
 int Led = 2;                                          // Led indicador de comando recibido
-const char *ssid = "MGAlarmas";                       // nombre de la red a donde me conecto
-const char *password = "mgalarmas3040";               // contraseña de red WIFI
+const char *ssid = "TP-LINK_B33E";                       // nombre de la red a donde me conecto
+const char *password = "50868155";               // contraseña de red WIFI
 const char *mqttServer = "mgalarmasserver1.ddns.net"; // dns del broker
 const int mqttPort = 1883;                            // puerto soket del broker
 const char *mqttUser = "";                            // usuario del boker
 const char *mqttPassword = "";                        // password del broker
+const char *topic = "/grupo6/app/";
+
 
 WiFiClient espClient;           // invoco al constructor de la clase Wificlient
 PubSubClient client(espClient); // establecemos objeto de la clase espClient
@@ -37,8 +39,41 @@ void derecha(){ // declaramos funcion para ir derecha
 }
 
 void Suscribe_MQTT(){
-  client.subscribe("/grupo6/app/"); // client.subscribe(ID+topico);
+  client.subscribe(topic); // client.subscribe(ID+topico);
 }
+
+
+void callback(char *topic, byte *payload, unsigned int length)
+{
+  Serial.print("Llego un dato");
+  if ((char)payload[0] == '1')
+  {
+  
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void setup()
 {
@@ -51,6 +86,7 @@ void setup()
     delay(500);
     Serial.print(".");
   }
+   Serial.println("");
   Serial.println("Conexion Exitosa a la red de wifi !!"); // publicamos al salir del while
 
   client.setServer(mqttServer, mqttPort); // me conecto al broker
@@ -79,6 +115,6 @@ void setup()
   pinMode(Velocidad, OUTPUT); // establecemos pin como salida
 }
 
-void loop()
-{
+void loop(){
+client.loop();
 }
