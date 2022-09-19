@@ -1,0 +1,98 @@
+//libreria bluetooth
+#include "BluetoothSerial.h"
+
+
+BluetoothSerial SerialBT;
+
+char receivedChar; //se definen pines
+
+const int MD1 = 12; 
+const int MD2 = 14; 
+const int MI1 = 27;
+const int MI2 = 26;
+
+void setup() {
+  Serial.begin(115200);
+  SerialBT.begin("ESP32"); //You can change your Bluetooth device name
+  pinMode(MD1, OUTPUT); .
+  pinMode(MD2, OUTPUT);
+  pinMode(MI1, OUTPUT);
+  pinMode(MI2, OUTPUT);
+}
+
+void Adelante(){
+        //motor derecho
+      digitalWrite(MD1,HIGH);
+      digitalWrite(MD2,LOW);
+      //motor izquierdo
+      digitalWrite(MI1,LOW);
+      digitalWrite(MI2,HIGH);
+}
+void Reversa(){
+      digitalWrite(MD1,LOW);
+      digitalWrite(MD2,HIGH);
+      digitalWrite(MI1,HIGH);
+      digitalWrite(MI2,LOW);
+}
+void Izquierda(){
+      digitalWrite(MD1,HIGH);
+      digitalWrite(MD2,LOW);
+      digitalWrite(MI1,HIGH);
+      digitalWrite(MI2,LOW);
+}
+void Derecha(){
+      digitalWrite(MD1,LOW);
+      digitalWrite(MD2,HIGH);
+      digitalWrite(MI1,LOW);
+      digitalWrite(MI2,HIGH);
+}
+void Parar(){
+      digitalWrite(MD1,LOW); 
+      digitalWrite(MD2,LOW);
+      digitalWrite(MI1,LOW); 
+      digitalWrite(MI2,LOW); 
+}
+void loop() {
+    receivedChar =(char)SerialBT.read();
+
+  if (Serial.available()) {
+    SerialBT.write(Serial.read());
+  
+  }
+  if (SerialBT.available()) {
+     
+    Serial.print ("Received:");
+    Serial.println(receivedChar);    
+    //instrucción de avanzar
+    if(receivedChar == 'A')
+    {
+      Adelante();
+       //instrucción de retroceder
+    }
+    if(receivedChar == 'R')
+    {
+ 
+      Reversa(); 
+    }         
+    //instrucción giro a la izquierda
+     if(receivedChar == 'I')
+    {
+
+      Izquierda();
+    }        
+    //instrucción giro a la derecha
+    if(receivedChar == 'D')
+    {
+
+      Derecha(); 
+    }
+
+    //instrucción para detenerse
+    if(receivedChar == 'S')
+    {
+      Parar();
+    }
+  }
+  delay(20);
+}
+
