@@ -64,7 +64,7 @@ void setup()
     Serial.println("Conectando al broker MQTT...");
     if (client.connect(clientId.c_str())){ // usuario broker random ante caidas
       Serial.println("Conectado !!!");
-      Serial.print("Usuario :");
+      Serial.print("Usuario : ");
       Serial.print(clientId.c_str());
   }else{
       Serial.print("Fallo en la conexion"); // en caso de no conectarse
