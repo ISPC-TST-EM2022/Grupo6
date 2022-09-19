@@ -1,19 +1,18 @@
 #include <Arduino.h>
 
 #include <WiFi.h>
-//#include <SPIFFS.h>
 #include <PubSubClient.h>
 
 int Dire1 =12; // pin de puente H manejo de direccion Mecanica 
 int Dire2 =11; // pin de puente H manejo de direccion Mecanica 
 int Velocidad = 10; // manejo de velocidad por PWM al puente H
 int Led= 2;
-const char* ssid = "MGAlarmas";
-const char* password = "mgalarmas3040";
-const char* mqttServer = "mgalarmasserver1.ddns.net";
-const int mqttPort = 1883;
-const char* mqttUser = "";
-const char* mqttPassword = "";
+const char* ssid = "MGAlarmas"; //nombre de la red a donde me conecto
+const char* password = "mgalarmas3040"; //contraseña de red WIFI
+const char* mqttServer = "mgalarmasserver1.ddns.net";//dns del broker
+const int mqttPort = 1883;//puerto soket del brojer
+const char* mqttUser = "";//usuario del boker
+const char* mqttPassword = "";//password del broker
 
 WiFiClient espClient; //invoco al constructor de la clase Wificlient
 PubSubClient client(espClient); // establecemos objeto de la clase espClient
