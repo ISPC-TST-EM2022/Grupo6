@@ -3,6 +3,27 @@
 
 
 
+
+
+void adelante(){
+
+}
+
+void atras(){
+
+}
+
+void izquierda(){
+
+}
+
+void derecha(){
+
+  
+}
+
+
+
 void setup(){
   Serial.begin(9600);
     pinMode(2, OUTPUT);
