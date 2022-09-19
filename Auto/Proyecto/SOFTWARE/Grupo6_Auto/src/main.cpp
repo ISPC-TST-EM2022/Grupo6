@@ -2,10 +2,10 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-int Dire1 = 12;     // pin de puente H manejo de direccion Mecanica
-int Dire2 = 11;     // pin de puente H manejo de direccion Mecanica
-int Velocidad = 10; // manejo de velocidad por PWM al puente H
-int Led = 2;        // Led indicador de comando recibido 
+int Dire1 = 12;                                       // pin de puente H manejo de direccion Mecanica
+int Dire2 = 11;                                       // pin de puente H manejo de direccion Mecanica
+int Velocidad = 10;                                   // manejo de velocidad por PWM al puente H
+int Led = 2;                                          // Led indicador de comando recibido
 const char *ssid = "MGAlarmas";                       // nombre de la red a donde me conecto
 const char *password = "mgalarmas3040";               // contraseña de red WIFI
 const char *mqttServer = "mgalarmasserver1.ddns.net"; // dns del broker
@@ -16,8 +16,7 @@ const char *mqttPassword = "";                        // password del broker
 WiFiClient espClient;           // invoco al constructor de la clase Wificlient
 PubSubClient client(espClient); // establecemos objeto de la clase espClient
 
-void adelante()
-{ // declaramos funcion para ir adelante
+void adelante(){ // declaramos funcion para ir adelante
   digitalWrite(Dire1, HIGH);
   digitalWrite(Dire2, HIGH);
 }
@@ -38,8 +37,7 @@ void derecha(){ // declaramos funcion para ir derecha
 }
 
 void Suscribe_MQTT(){
-  client.subscribe("/grupo6/app/");
-  // client.subscribe(ID+topico);
+  client.subscribe("/grupo6/app/"); // client.subscribe(ID+topico);
 }
 
 void setup()
@@ -58,7 +56,7 @@ void setup()
   client.setServer(mqttServer, mqttPort); // me conecto al broker
   while (!client.connected())             // bucle de espera hasta conexion exitoas
   {
-        String clientId = "Grupo6"; // cargo nombre de usuario
+    String clientId = "Grupo6";              // cargo nombre de usuario
     clientId += String(random(0xffff), HEX); // sumo al usuario numero random para que me acepte broker
 
     Serial.println("Conectando al broker MQTT...");
@@ -66,9 +64,11 @@ void setup()
       Serial.println("Conectado !!!");
       Serial.print("Usuario: ");
       Serial.print(clientId.c_str());
-  }else{
+    }
+    else
+    {
       Serial.print("Fallo en la conexion"); // en caso de no conectarse
-      Serial.print(client.state());         // publico por el serial es estado de la conexion al broker
+      Serial.print(client.state());         // publico por el serial el estado de la conexion al broker
       delay(2000);
     }
   }
@@ -79,7 +79,6 @@ void setup()
   pinMode(Velocidad, OUTPUT); // establecemos pin como salida
 }
 
-void loop(){
-
-
+void loop()
+{
 }
