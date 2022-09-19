@@ -1,39 +1,79 @@
 #include <Arduino.h>
 
+#include <WiFi.h>
+//#include <SPIFFS.h>
+#include <PubSubClient.h>
+
 int Dire1 =12; // pin de puente H manejo de direccion Mecanica 
 int Dire2 =11; // pin de puente H manejo de direccion Mecanica 
-int Velocidad = 10; // manjo de velocidad por PWM al puente H
+int Velocidad = 10; // manejo de velocidad por PWM al puente H
 int Led= 2;
+const char* ssid = "MGAlarmas";
+const char* password = "mgalarmas3040";
+const char* mqttServer = "mgalarmasserver1.ddns.net";
+const int mqttPort = 1883;
+const char* mqttUser = "";
+const char* mqttPassword = "";
 
-void adelante(){
+WiFiClient espClient; //invoco al constructor de la clase Wificlient
+PubSubClient client(espClient); // establecemos objeto de la clase espClient
+
+void adelante(){ //declaramos funcion para ir adelante
   digitalWrite(Dire1, HIGH);
   digitalWrite(Dire2, HIGH);
 }
 
-void atras(){
+void atras(){ // declaramos funcion para ir para atras
   digitalWrite(Dire1, LOW);
   digitalWrite(Dire2, LOW);
 }
 
-void izquierda(){
-  digitalWrite(Dire1, HIGH;
+void izquierda(){ // declaramos funcion para ir izquierda
+  digitalWrite(Dire1, HIGH);
   digitalWrite(Dire2, LOW);
 }
 
-void derecha(){
-  digitalWrite(Dire1, LOW;
+void derecha(){ // declaramos funcion para ir derecha
+  digitalWrite(Dire1, LOW);
   digitalWrite(Dire2, HIGH);
 }
 
 void setup(){
-  Serial.begin(9600);
-  pinMode(Led, OUTPUT);
-  pinMode(Dire1, OUTPUT); 
-  pinMode(Dire2, OUTPUT);
-  pinMode(velocidad, OUTPUT); 
+  Serial.begin(9600); // iniciamos serial a 9600 para velocidad de depuracion de errores
+  WiFi.begin(ssid, password); //inicia la conexion WIFI
+
+  Serial.print("Conectando ");
+  while (WiFi.status() != WL_CONNECTED) //While de espera mientras nos atiende el router 
+       {  delay(500);
+          Serial.print(".") ;
+       }
+  Serial.println("Conexion Exitosa a la red de wifi !!"); // publicamos al salir del while
+
+
+client.setServer(mqttServer, mqttPort);
+while (!client.connected())
+{      Serial.println("Conectando al broker MQTT...");
+       if (client.connect("ESP32Client", mqttUser, mqttPassword ))
+           Serial.println("Conectado !!!");
+       else
+       {   Serial.print("Fallo en la conexion");
+           Serial.print(client.state());
+           delay(2000);
+       }
+}
+
+  pinMode(Led, OUTPUT); // establecemos pin como salida
+  pinMode(Dire1, OUTPUT); // establecemos pin como salida
+  pinMode(Dire2, OUTPUT); // establecemos pin como salida
+  pinMode(Velocidad, OUTPUT); // establecemos pin como salida
+
 }
 
 void loop(){
+
+
+
+
 
 }
 
