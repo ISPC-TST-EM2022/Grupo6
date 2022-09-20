@@ -42,14 +42,20 @@ void Suscribe_MQTT(){
   client.subscribe(topic); // client.subscribe(ID+topico);
 }
 
-
 void callback(char *topic, byte *payload, unsigned int length)
 {
+  Serial.print("hola llego algo");
   Serial.print("Llego un dato");
   if ((char)payload[0] == '1')
   {
-  
-  }
+    for (int i = 0; i < 10; i++)
+    {
+          digitalWrite(Led, HIGH);
+          delay(1000);
+          digitalWrite(Led, LOW);
+          delay(1000);
+    }
+      }
 }
 
 void setup()
@@ -67,7 +73,7 @@ void setup()
   Serial.println("Conexion Exitosa a la red de wifi !!"); // publicamos al salir del while
 
   client.setServer(mqttServer, mqttPort); // me conecto al broker
-  while (!client.connected())             // bucle de espera hasta conexion exitoas
+  while (!client.connected())             // bucle de espera hasta conexion exitosa
   {
     String clientId = "Grupo6";              // cargo nombre de usuario
     clientId += String(random(0xffff), HEX); // sumo al usuario numero random para que me acepte broker
@@ -85,6 +91,7 @@ void setup()
       delay(2000);
     }
   }
+  client.setCallback(callback);
 
   pinMode(Led, OUTPUT);       // establecemos pin como salida
   pinMode(Dire1, OUTPUT);     // establecemos pin como salida
