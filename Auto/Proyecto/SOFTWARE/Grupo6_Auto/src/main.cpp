@@ -60,8 +60,8 @@ void medir()
 }
 
 
-// void Suscribe_MQTT()
-// {
+ void Suscribe_MQTT()
+{
 //   client.subscribe(topic); // client.subscribe(ID+topico);
 // }
 
@@ -84,7 +84,7 @@ void medir()
 //       delay(1000);
 //     }
 //   }
-// }
+ }
 
 void setup()
 {
