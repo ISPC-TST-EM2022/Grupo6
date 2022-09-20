@@ -42,16 +42,30 @@ void derecha()
   digitalWrite(Dire2, HIGH);
 }
 
+void medir()
+{
+  int mq7 = analogRead(Sensor);                   // Lemos la salida analógica del MQ
+  float voltaje = mq7 * (5.0 / 1023.0);           // Convertimos la lectura en un valor de voltaje
+  float Rs = 1000 * ((5 - voltaje) / voltaje);    // preset con una resitencia ideal de 1000 ohms
+  double monox = 0.4091 * pow(Rs / 5463, -1.497); // concentración  de CO ecu segun fabricante
+}
+
+
 void Suscribe_MQTT()
 {
   client.subscribe(topic); // client.subscribe(ID+topico);
 }
 
-void callback(char *topic, byte *payload, unsigned int length)
+void Publica_MQTT(){
+  //client.publish(topic, monoxido);
+}
+
+
+void callback(char *topic, byte *payload, unsigned int length)//rutina de llegada de datos por MQTT
 {
   Serial.print("hola llego algo");
   Serial.print("Llego un dato");
-  if ((char)payload[0] == '1')
+  if ((char)payload[0] == '1') //cargamos el valor de arreglo indice 0 en una variable para el case
   {
     for (int i = 0; i < 10; i++)
     {
@@ -61,14 +75,6 @@ void callback(char *topic, byte *payload, unsigned int length)
       delay(1000);
     }
   }
-}
-
-void medir()
-{
-  int mq7 = analogRead(Sensor);                      // Lemos la salida analógica del MQ
-  float voltaje = mq7 * (5.0 / 1023.0);              // Convertimos la lectura en un valor de voltaje
-  float Rs = 1000 * ((5 - voltaje) / voltaje);       // preset con una resitencia ideal de 1000 ohms
-  double monoxido = 0.4091 * pow(Rs / 5463, -1.497); // concentración  de CO ecu segun fabricante
 }
 
 void setup()
@@ -115,5 +121,5 @@ void setup()
 void loop()
 {
   client.loop();
-  
+
 }
