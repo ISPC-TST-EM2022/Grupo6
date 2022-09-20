@@ -2,9 +2,13 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-int Dire1 = 12;     // pin de puente H manejo de direccion Mecanica
-int Dire2 = 11;     // pin de puente H manejo de direccion Mecanica
-int Velocidad = 10; // manejo de velocidad por PWM al puente H
+int Dire1 = 35;     // pin de puente H manejo de direccion Mecanica
+int Dire2 = 32;     // pin de puente H manejo de direccion Mecanica
+int Dire3 = 33;     // pin de puente H manejo de direccion Mecanica
+int Dire4 = 25;     // pin de puente H manejo de direccion Mecanica
+int Velocidad_1 = 34; // manejo de velocidad por PWM al puente H
+int Velocidad_2 = 26;
+
 int Led = 2;
 int Sensor = 25;                                      // Led indicador de comando recibido
 const char *ssid = "TP-LINK_B33E";                    // nombre de la red a donde me conecto
@@ -21,7 +25,12 @@ PubSubClient client(espClient); // establecemos objeto de la clase espClient
 void adelante()
 { // declaramos funcion para ir adelante
   digitalWrite(Dire1, HIGH);
-  digitalWrite(Dire2, HIGH);
+  digitalWrite(Dire2, LOW);
+  digitalWrite(Dire3, HIGH);
+  digitalWrite(Dire4, LOW);
+  digitalWrite(Velocidad_1, HIGH);
+  digitalWrite(Velocidad_2, HIGH);
+
 }
 
 void atras()
@@ -51,75 +60,81 @@ void medir()
 }
 
 
-void Suscribe_MQTT()
-{
-  client.subscribe(topic); // client.subscribe(ID+topico);
-}
+// void Suscribe_MQTT()
+// {
+//   client.subscribe(topic); // client.subscribe(ID+topico);
+// }
 
-void Publica_MQTT(){
-  //client.publish(topic, monoxido);
-}
+// void Publica_MQTT(){
+//   //client.publish(topic, monoxido);
+// }
 
 
-void callback(char *topic, byte *payload, unsigned int length)//rutina de llegada de datos por MQTT
-{
-  Serial.print("hola llego algo");
-  Serial.print("Llego un dato");
-  if ((char)payload[0] == '1') //cargamos el valor de arreglo indice 0 en una variable para el case
-  {
-    for (int i = 0; i < 10; i++)
-    {
-      digitalWrite(Led, HIGH);
-      delay(1000);
-      digitalWrite(Led, LOW);
-      delay(1000);
-    }
-  }
-}
+// void callback(char *topic, byte *payload, unsigned int length)//rutina de llegada de datos por MQTT
+// {
+//   Serial.print("hola llego algo");
+//   Serial.print("Llego un dato");
+//   if ((char)payload[0] == '1') //cargamos el valor de arreglo indice 0 en una variable para el case
+//   {
+//     for (int i = 0; i < 10; i++)
+//     {
+//       digitalWrite(Led, HIGH);
+//       delay(1000);
+//       digitalWrite(Led, LOW);
+//       delay(1000);
+//     }
+//   }
+// }
 
 void setup()
 {
   Serial.begin(9600);         // iniciamos serial a 9600 para velocidad de depuracion de errores
   WiFi.begin(ssid, password); // inicia la conexion WIFI
 
-  Serial.print("Conectando ");
-  while (WiFi.status() != WL_CONNECTED) // While de espera mientras nos atiende el router
-  {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.println("Conexion Exitosa a la red de wifi !!"); // publicamos al salir del while
+  // Serial.print("Conectando ");
+  // while (WiFi.status() != WL_CONNECTED) // While de espera mientras nos atiende el router
+  // {
+  //   delay(500);
+  //   Serial.print(".");
+  // }
+  // Serial.println("");
+  // Serial.println("Conexion Exitosa a la red de wifi !!"); // publicamos al salir del while
 
-  client.setServer(mqttServer, mqttPort); // me conecto al broker
-  while (!client.connected())             // bucle de espera hasta conexion exitosa
-  {
-    String clientId = "Grupo6";              // cargo nombre de usuario
-    clientId += String(random(0xffff), HEX); // sumo al usuario numero random para que me acepte broker
+  // client.setServer(mqttServer, mqttPort); // me conecto al broker
+  // while (!client.connected())             // bucle de espera hasta conexion exitosa
+  // {
+  //   String clientId = "Grupo6";              // cargo nombre de usuario
+  //   clientId += String(random(0xffff), HEX); // sumo al usuario numero random para que me acepte broker
 
-    Serial.println("Conectando al broker MQTT...");
-    if (client.connect(clientId.c_str()))
-    { // usuario broker random ante caidas
-      Serial.println("Conectado !!!");
-      Serial.print("Usuario: ");
-      Serial.print(clientId.c_str());
-    }
-    else
-    {
-      Serial.print("Fallo en la conexion"); // en caso de no conectarse
-      Serial.print(client.state());         // publico por el serial el estado de la conexion al broker
-      delay(2000);
-    }
-  }
-  client.setCallback(callback);
+  //   Serial.println("Conectando al broker MQTT...");
+  //   if (client.connect(clientId.c_str()))
+  //   { // usuario broker random ante caidas
+  //     Serial.println("Conectado !!!");
+  //     Serial.print("Usuario: ");
+  //     Serial.print(clientId.c_str());
+  //   }
+  //   else
+  //   {
+  //     Serial.print("Fallo en la conexion"); // en caso de no conectarse
+  //     Serial.print(client.state());         // publico por el serial el estado de la conexion al broker
+  //     delay(2000);
+  //   }
+  // }
+  // client.setCallback(callback);
   pinMode(Led, OUTPUT);       // establecemos pin como salida
   pinMode(Dire1, OUTPUT);     // establecemos pin como salida
   pinMode(Dire2, OUTPUT);     // establecemos pin como salida
-  pinMode(Velocidad, OUTPUT); // establecemos pin como salida
+  pinMode(Dire3, OUTPUT);     // establecemos pin como salida
+  pinMode(Dire4, OUTPUT);     // establecemos pin como salida
+  pinMode(Velocidad_1, OUTPUT); // establecemos pin como salida
 }
 
 void loop()
 {
-  client.loop();
+  //client.loop();
 
+
+adelante();
+delay(1000);
+ 
 }
