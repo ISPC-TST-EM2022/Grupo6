@@ -1,11 +1,18 @@
+//Esp32 se conecta mediante bluetooth al celular y es controlado por la app ACRICO.
+//Esp32 recibe los datos del sensor de gas mq2. Si se detecta presencia de gas se enciende un led
+
+#include <Arduino.h>
+#include "BluetoothSerial.h"  //libreria bluetooth 
+
 BluetoothSerial SerialBT;
 
 //declaracion relacionadas con bluetooth
 int received; //almacena el parametro recibido por la conexion bluetooth
 
-//declaracion de variables y puertos relacionados con sensor mq7
+//declaracion de variables y puertos relacionados con sensor mq2
+int cantidadGas;  //variable que almacena los datos del sensor
 int ledGas = 2; //pin donde se conecta el led que se enciende con niveles peligrosos de gas
-int sensor = 33; //pin donde se conecta el sensor
+int sensor = 4; //pin donde se conecta el sensor
 
 //declaracion de variables y puertos relacionados con motores dc
 const int MD1 = 12; //motor derecho 1
@@ -23,7 +30,9 @@ void setup() {
   pinMode(MD2, OUTPUT); //se declara pin MD2 como salida 
   pinMode(MI1, OUTPUT); //se declara pin MI1 como salida 
   pinMode(MI2, OUTPUT); //se declara pin MI2 como salida 
+  
 }
+
 
 void Adelante(){
   //metodo que mueve el auto hacia adelante
@@ -71,8 +80,10 @@ void Parar(){
 }
 void loop() {
    
+  
+  
  
-  if(digitalRead(sensor)==HIGH)//si el senseor mq7 detecta gas se enciende led
+  if(digitalRead(sensor)==HIGH)//si el senseor mq2 detecta gas se enciende led
   { 
       digitalWrite(ledGas,HIGH);
       
