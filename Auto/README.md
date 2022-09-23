@@ -36,6 +36,7 @@ Materiales:
 
 Diagrama de bloques:
 
+![diagrama de bloques final](https://user-images.githubusercontent.com/108995163/192035877-1686c9cc-b095-48bd-9b4e-744f10f875ba.png)
 
 
 
