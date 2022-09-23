@@ -31,7 +31,7 @@ Materiales:
 
 
 ![Materiales1](https://user-images.githubusercontent.com/108995163/192034405-f67acad2-1860-4a7d-904f-fe3479957a64.png)
-![Materiales2](https://user-images.githubusercontent.com/108995163/192034488-15aff819-878f-41f2-9261-fe4a299af7f5.png)
+    ![Materiales2](https://user-images.githubusercontent.com/108995163/192034488-15aff819-878f-41f2-9261-fe4a299af7f5.png)
 
 
 Diagrama de bloques:
@@ -43,4 +43,7 @@ Diagrama de bloques:
 Diagrama de Gantt:
 
 
+![diagrama de gantt-1](https://user-images.githubusercontent.com/108995163/192044690-2b2993f0-5422-4a74-a21e-26e75ba91586.png)
+
+![diagrama de gantt-2](https://user-images.githubusercontent.com/108995163/192044712-bd8cdff6-3fa6-4a95-b859-28236330ef4e.png)
 
