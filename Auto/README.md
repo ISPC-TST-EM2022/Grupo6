@@ -1,10 +1,11 @@
 # Grupo6
 Desarrollo de trabajo práctico "Auto robot"
+
 Profesores:
 - Jorge Morales.
 - Gonzalo Vera.
 
-Integrantes: GitHub:
+Integrantes:            GitHub:
 - Guzmán, Lilén https://github.com/lilenguzman01
 - López, Maximiliano https://github.com/Maxilopez28
 - Moyano, Emilio https://github.com/TerraWolf
