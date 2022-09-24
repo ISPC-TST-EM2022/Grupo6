@@ -15,13 +15,13 @@ int ledGas = 2; //pin donde se conecta el led que se enciende con niveles peligr
 int sensor = 4; //pin donde se conecta el sensor
 
 //declaracion de variables y puertos relacionados con motores dc
-const int MD1 = 12; //motor derecho 1
-const int MD2 = 14; //motor derecho 2
+const int MD1 = 33; //motor derecho 1
+const int MD2 = 32; //motor derecho 2
 const int MI1 = 27; //motor izquierdo 1
 const int MI2 = 26; //motor izquierdo 2
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   SerialBT.begin("ESP32"); //nombre con el que se identifica la conexion del bluetooth del esp32
   pinMode(ledGas, OUTPUT);  //secdeclara el pin ledGas como salida
   digitalWrite(ledGas,LOW); //para asegurarnos que este apagado el led
@@ -35,39 +35,51 @@ void setup() {
 
 
 void Adelante(){
-  //metodo que mueve el auto hacia adelante
-  //motores lado derecho
-  digitalWrite(MD1,HIGH); //se mueve
-  digitalWrite(MD2,LOW); 
-  //motores lado izquierdo
-  digitalWrite(MI1,LOW);
-  digitalWrite(MI2,HIGH); //se mueve
+  
+  // //metodo que mueve el auto hacia adelante
+  // //motores lado derecho
+   digitalWrite(MD1,HIGH); //se mueve
+   digitalWrite(MD2,LOW); 
+  // //motores lado izquierdo
+  digitalWrite(MI1,HIGH);
+  digitalWrite(MI2,LOW); //se mueve
 }
 void Reversa(){
-  //metodo que mueve el auto en reversa
-  //motores lado derecho
-  digitalWrite(MD1,LOW);
-  digitalWrite(MD2,HIGH); //se mueve
+  // //metodo que mueve el auto en reversa
+  // //motores lado derecho
+  //  digitalWrite(MD1,LOW);
+  //  digitalWrite(MD2,HIGH); //se mueve
+  // //motores lado izquierdo
+  // digitalWrite(MI1,HIGH); //se mueve
+  // digitalWrite(MI2,LOW);
+ 
+
+  //metodo que mueve el auto hacia la izquierda
+  // //motores lado derecho
+  digitalWrite(MD1,LOW); //se mueve
+  digitalWrite(MD2,HIGH);
   //motores lado izquierdo
-  digitalWrite(MI1,HIGH); //se mueve
-  digitalWrite(MI2,LOW);
+   digitalWrite(MI1,LOW); //se mueve
+   digitalWrite(MI2,HIGH);
+
+
 }
 void Izquierda(){
-  //metodo que mueve el auto hacia la izquierda
-  //motores lado derecho
-  digitalWrite(MD1,HIGH); //se mueve
-  digitalWrite(MD2,LOW);
-  //motores lado izquierdo
-  digitalWrite(MI1,HIGH); //se mueve
-  digitalWrite(MI2,LOW);
+  // //metodo que mueve el auto hacia la izquierda
+  // //motores lado derecho
+   digitalWrite(MD1,LOW); //se mueve
+   digitalWrite(MD2,LOW);
+  // //motores lado izquierdo
+   digitalWrite(MI1,HIGH); //se mueve
+   digitalWrite(MI2,LOW);
 }
 void Derecha(){
   //metodo que mueve el auto hacia la derecha
   //motores lado derecho
-  digitalWrite(MD1,LOW);
-  digitalWrite(MD2,HIGH); //se mueve
-  digitalWrite(MI1,LOW);
-  digitalWrite(MI2,HIGH); //se mueve
+   digitalWrite(MD1,HIGH);
+   digitalWrite(MD2,LOW); //se mueve
+   digitalWrite(MI1,LOW);
+   digitalWrite(MI2,LOW); //se mueve
 }
 void Parar(){
   //metodo que detiene los 4 motores del auto
