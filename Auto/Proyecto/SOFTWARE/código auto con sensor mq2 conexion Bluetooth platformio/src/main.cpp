@@ -12,10 +12,10 @@ int received; //almacena el parametro recibido por la conexion bluetooth
 //declaracion de variables y puertos relacionados con sensor mq2
 int cantidadGas;  //variable que almacena los datos del sensor
 int ledGas = 22; //pin donde se conecta el led que se enciende con niveles peligrosos de gas
+int ledblue = 4; //pin donde se conecta el led de rex comandos 
 int sensor_digi = 18; //pin de lectura digital sensor
 int sensor_analogo =19; //pin de lectura analogica sensor
 
-int ledblue = 35;
 
 //declaracion de variables y puertos relacionados con motores dc
 const int MD1 = 33; //motor derecho 1
@@ -27,7 +27,8 @@ void setup() {
   Serial.begin(9600);
   SerialBT.begin("ESP32"); //nombre con el que se identifica la conexion del bluetooth del esp32
   pinMode(ledGas, OUTPUT);  //secdeclara el pin ledGas como salida
-  digitalWrite(ledGas,LOW); //para asegurarnos que este apagado el led
+  digitalWrite(ledGas,HIGH); //para asegurarnos que este apagado el led
+  digitalWrite(ledblue, LOW);
   pinMode(sensor_digi,INPUT);  //se declara el pin sensor como entrada
   pinMode(sensor_analogo,INPUT);  //se declara el pin sensor como entrada
   pinMode(MD1, OUTPUT); //se declara pin MD1 como salida 
@@ -50,16 +51,7 @@ void Adelante(){
 }
 void Reversa(){
   // //metodo que mueve el auto en reversa
-  // //motores lado derecho
-  //  digitalWrite(MD1,LOW);
-  //  digitalWrite(MD2,HIGH); //se mueve
-  // //motores lado izquierdo
-  // digitalWrite(MI1,HIGH); //se mueve
-  // digitalWrite(MI2,LOW);
- 
 
-  //metodo que mueve el auto hacia la izquierda
-  // //motores lado derecho
   digitalWrite(MD1,LOW); //se mueve
   digitalWrite(MD2,HIGH);
   //motores lado izquierdo
@@ -94,18 +86,38 @@ void Parar(){
   digitalWrite(MI1,LOW); 
   digitalWrite(MI2,LOW); 
 }
+
+void rx_blue(){
+  digitalWrite(ledblue, HIGH);
+  delay(200);
+  digitalWrite(ledblue, LOW);
+  delay(200);
+}
 void loop() {
    
-  
+
   
  
-  if(digitalRead(sensor)==HIGH)//si el senseor mq2 detecta gas se enciende led
+  if(digitalRead(sensor_digi)==LOW)//si el senseor mq2 detecta gas se enciende led
   { 
+
+    while (digitalRead(sensor_digi)==LOW)
+    {
+      digitalWrite(ledGas,LOW);
+      delay(100);
+      digitalWrite(ledGas,HIGH);
+      delay(100);
+    }
+    
       digitalWrite(ledGas,HIGH);
       
+
+
+
+
   }else{//si no detecta gas se apaga el led
     
-      digitalWrite(ledGas,LOW);
+      digitalWrite(ledGas,HIGH);
 
     }
   if (SerialBT.available())//si hay un dato proveniente del bluetooth para leer 
