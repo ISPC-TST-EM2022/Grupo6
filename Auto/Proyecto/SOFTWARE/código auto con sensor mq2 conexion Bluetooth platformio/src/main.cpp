@@ -92,7 +92,7 @@ void rx_blue(){
 void loop() {
    
 
-  rx_blue();
+
  
   if(digitalRead(sensor_digi)==LOW)//si el senseor mq2 detecta gas se enciende led
   { 
