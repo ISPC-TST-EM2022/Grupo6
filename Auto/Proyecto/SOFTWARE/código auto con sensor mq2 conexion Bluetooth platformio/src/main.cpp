@@ -11,8 +11,11 @@ int received; //almacena el parametro recibido por la conexion bluetooth
 
 //declaracion de variables y puertos relacionados con sensor mq2
 int cantidadGas;  //variable que almacena los datos del sensor
-int ledGas = 2; //pin donde se conecta el led que se enciende con niveles peligrosos de gas
-int sensor = 4; //pin donde se conecta el sensor
+int ledGas = 22; //pin donde se conecta el led que se enciende con niveles peligrosos de gas
+int sensor_digi = 18; //pin de lectura digital sensor
+int sensor_analogo =19; //pin de lectura analogica sensor
+
+int ledblue = 35;
 
 //declaracion de variables y puertos relacionados con motores dc
 const int MD1 = 33; //motor derecho 1
@@ -25,7 +28,8 @@ void setup() {
   SerialBT.begin("ESP32"); //nombre con el que se identifica la conexion del bluetooth del esp32
   pinMode(ledGas, OUTPUT);  //secdeclara el pin ledGas como salida
   digitalWrite(ledGas,LOW); //para asegurarnos que este apagado el led
-  pinMode(sensor,INPUT);  //se declara el pin sensor como entrada
+  pinMode(sensor_digi,INPUT);  //se declara el pin sensor como entrada
+  pinMode(sensor_analogo,INPUT);  //se declara el pin sensor como entrada
   pinMode(MD1, OUTPUT); //se declara pin MD1 como salida 
   pinMode(MD2, OUTPUT); //se declara pin MD2 como salida 
   pinMode(MI1, OUTPUT); //se declara pin MI1 como salida 
