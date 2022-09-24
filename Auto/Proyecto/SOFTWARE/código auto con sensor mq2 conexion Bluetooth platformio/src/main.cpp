@@ -115,11 +115,13 @@ void loop() {
    {
       received =SerialBT.read();//lee lo recibido por bluetooth
       rx_blue();
+      delay(100);
         
     
       if(received == '1')//si recibe un 1 llama al metodo Adelante()
       {
         Adelante();
+        digitalWrite
        
       }
       if(received == '2')//si recibe un 2 llama al metodo Reversa()
