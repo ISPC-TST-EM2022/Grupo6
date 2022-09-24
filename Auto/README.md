@@ -37,7 +37,8 @@ Materiales:
 
 Diagrama de bloques:
 
-![diagrama de bloques final](https://user-images.githubusercontent.com/108995163/192035877-1686c9cc-b095-48bd-9b4e-744f10f875ba.png)
+
+![actualizo diagrama en bloques](https://user-images.githubusercontent.com/108995163/192071553-0f2c0a38-326f-4dc1-aa6a-222583b8b80b.png)
 
 
 
