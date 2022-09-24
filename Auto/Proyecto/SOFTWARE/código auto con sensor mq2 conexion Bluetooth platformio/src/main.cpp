@@ -12,7 +12,7 @@ int received; //almacena el parametro recibido por la conexion bluetooth
 //declaracion de variables y puertos relacionados con sensor mq2
 int cantidadGas;  //variable que almacena los datos del sensor
 int ledGas = 22; //pin donde se conecta el led que se enciende con niveles peligrosos de gas
-int ledblue = 4; //pin donde se conecta el led de rex comandos 
+int ledblue = 35; //pin donde se conecta el led de rex comandos 
 int sensor_digi = 18; //pin de lectura digital sensor
 int sensor_analogo =19; //pin de lectura analogica sensor
 
@@ -35,12 +35,10 @@ void setup() {
   pinMode(MD2, OUTPUT); //se declara pin MD2 como salida 
   pinMode(MI1, OUTPUT); //se declara pin MI1 como salida 
   pinMode(MI2, OUTPUT); //se declara pin MI2 como salida 
-  
-}
+  }
 
 
 void Adelante(){
-  
   // //metodo que mueve el auto hacia adelante
   // //motores lado derecho
    digitalWrite(MD1,HIGH); //se mueve
@@ -51,15 +49,13 @@ void Adelante(){
 }
 void Reversa(){
   // //metodo que mueve el auto en reversa
-
   digitalWrite(MD1,LOW); //se mueve
   digitalWrite(MD2,HIGH);
   //motores lado izquierdo
-   digitalWrite(MI1,LOW); //se mueve
-   digitalWrite(MI2,HIGH);
-
-
+  digitalWrite(MI1,LOW); //se mueve
+  digitalWrite(MI2,HIGH);
 }
+
 void Izquierda(){
   // //metodo que mueve el auto hacia la izquierda
   // //motores lado derecho
@@ -96,11 +92,10 @@ void rx_blue(){
 void loop() {
    
 
-  
+  rx_blue();
  
   if(digitalRead(sensor_digi)==LOW)//si el senseor mq2 detecta gas se enciende led
   { 
-
     while (digitalRead(sensor_digi)==LOW)
     {
       digitalWrite(ledGas,LOW);
@@ -108,12 +103,8 @@ void loop() {
       digitalWrite(ledGas,HIGH);
       delay(100);
     }
-    
+   
       digitalWrite(ledGas,HIGH);
-      
-
-
-
 
   }else{//si no detecta gas se apaga el led
     
@@ -123,6 +114,7 @@ void loop() {
   if (SerialBT.available())//si hay un dato proveniente del bluetooth para leer 
    {
       received =SerialBT.read();//lee lo recibido por bluetooth
+      rx_blue();
         
     
       if(received == '1')//si recibe un 1 llama al metodo Adelante()
