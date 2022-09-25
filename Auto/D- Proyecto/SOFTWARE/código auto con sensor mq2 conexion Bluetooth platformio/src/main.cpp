@@ -100,6 +100,7 @@ void loop() {
     {
       digitalWrite(ledGas,LOW);
 <<<<<<< HEAD
+<<<<<<< HEAD
       delay(150);
       digitalWrite(ledGas,HIGH);
       delay(150);
@@ -108,16 +109,25 @@ void loop() {
       digitalWrite(ledGas,HIGH);
       delay(100);
 >>>>>>> 8693e62e0aefdd74f73850d3d8a132841116bca3
+=======
+      delay(150);
+      digitalWrite(ledGas,HIGH);
+      delay(150);
+>>>>>>> 5a45d626cd093d09f7a4cee47e04cd8b5ab68fbc
     }
    
       digitalWrite(ledGas,HIGH);
 
   }else{//si no detecta gas se apaga el led
 <<<<<<< HEAD
+<<<<<<< HEAD
    
 =======
     
 >>>>>>> 8693e62e0aefdd74f73850d3d8a132841116bca3
+=======
+
+>>>>>>> 5a45d626cd093d09f7a4cee47e04cd8b5ab68fbc
       digitalWrite(ledGas,HIGH);
 
     }
