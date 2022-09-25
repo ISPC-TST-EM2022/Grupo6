@@ -99,15 +99,15 @@ void loop() {
     while (digitalRead(sensor_digi)==LOW)
     {
       digitalWrite(ledGas,LOW);
-      delay(100);
+      delay(150);
       digitalWrite(ledGas,HIGH);
-      delay(100);
+      delay(150);
     }
    
       digitalWrite(ledGas,HIGH);
 
   }else{//si no detecta gas se apaga el led
-    
+
       digitalWrite(ledGas,HIGH);
 
     }
