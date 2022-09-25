@@ -44,8 +44,6 @@ Diagrama de bloques:
 
 Diagrama de Gantt:
 
+![diagrama gantt final](https://user-images.githubusercontent.com/108995163/192125894-9483e33a-cdd7-49cb-bbd4-75d79ec2c57d.png)
 
-![diagrama de gantt-1](https://user-images.githubusercontent.com/108995163/192044690-2b2993f0-5422-4a74-a21e-26e75ba91586.png)
-
-![diagrama de gantt-2](https://user-images.githubusercontent.com/108995163/192044712-bd8cdff6-3fa6-4a95-b859-28236330ef4e.png)
 
