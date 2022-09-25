@@ -107,7 +107,7 @@ void loop() {
       digitalWrite(ledGas,HIGH);
 
   }else{//si no detecta gas se apaga el led
-   
+
       digitalWrite(ledGas,HIGH);
 
     }
