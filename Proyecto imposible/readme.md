@@ -5,6 +5,6 @@
 
 ![Diapositiva2](https://user-images.githubusercontent.com/59898130/196565154-b766843f-ef50-449e-9c72-847fe5b27752.JPG)
 ![Diapositiva3](https://user-images.githubusercontent.com/59898130/196565271-239b1071-0993-4a1a-8108-23307bc339fc.JPG)
-![Diapositiva4](https://user-images.githubusercontent.com/59898130/196565287-7189368b-f160-44dd-b7d2-c3eeaeb12791.JPG)
-![Diapositiva5](https://user-images.githubusercontent.com/59898130/196565308-01992528-79d4-4deb-aee5-a98979bf6f83.JPG)
-![Readme-principal-ppt](https://user-images.githubusercontent.com/59898130/196565331-81f5f474-9141-403e-abc4-7025d7506981.jpg)
+![Diapositiva4](https://user-images.githubusercontent.com/59898130/196833641-e76438de-db48-46dc-b7f4-9bd502bf6510.JPG)
+![Diapositiva5](https://user-images.githubusercontent.com/59898130/196833651-93b8ded4-ba86-40e2-9ceb-bb3701fadf5e.JPG)
+![Diapositiva6](https://user-images.githubusercontent.com/59898130/196833663-67591e83-9b3e-4c1c-825a-426952544479.JPG)
