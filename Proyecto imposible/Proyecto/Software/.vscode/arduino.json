@@ -1,7 +1,6 @@
 {
-    "sketch": "invernadero.ino",
-    "output": "build",
     "configuration": "FlashFreq=80,UploadSpeed=921600",
     "board": "esp32:esp32:nodemcu-32s",
-    "port": "COM5"
+    "port": "COM5",
+    "sketch": "invernadero.ino"
 }

@@ -2,6 +2,24 @@
     "version": 4,
     "configurations": [
         {
+            "name": "Win32",
+            "compilerPath": "",
+            "compilerArgs": [],
+            "intelliSenseMode": "windows-msvc-x64",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "c:\\libraries"
+            ],
+            "forcedInclude": [],
+            "cStandard": "",
+            "cppStandard": "",
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ]
+        },
+        {
             "name": "Arduino",
             "compilerPath": "C:\\Users\\MG Alarmas\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\xtensa-esp32-elf-gcc\\1.22.0-97-gc752ad5-5.2.0\\bin\\xtensa-esp32-elf-g++",
             "compilerArgs": [
@@ -92,6 +110,8 @@
                 "C:\\Users\\MG Alarmas\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\tools\\sdk\\include\\fb_gfx",
                 "C:\\Users\\MG Alarmas\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\cores\\esp32",
                 "C:\\Users\\MG Alarmas\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\variants\\nodemcu-32s",
+                "C:\\Users\\MG Alarmas\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\WiFi\\src",
+                "C:\\Users\\MG Alarmas\\Documents\\Arduino\\libraries\\PubSubClient\\src",
                 "C:\\Users\\MG Alarmas\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\libraries\\Wire\\src",
                 "C:\\Users\\MG Alarmas\\Documents\\Arduino\\libraries\\Adafruit_BMP280_Library",
                 "C:\\Users\\MG Alarmas\\Documents\\Arduino\\libraries\\Adafruit_Unified_Sensor",
@@ -103,8 +123,7 @@
                 "c:\\users\\mg alarmas\\appdata\\local\\arduino15\\packages\\esp32\\tools\\xtensa-esp32-elf-gcc\\1.22.0-97-gc752ad5-5.2.0\\lib\\gcc\\xtensa-esp32-elf\\5.2.0\\include",
                 "c:\\users\\mg alarmas\\appdata\\local\\arduino15\\packages\\esp32\\tools\\xtensa-esp32-elf-gcc\\1.22.0-97-gc752ad5-5.2.0\\lib\\gcc\\xtensa-esp32-elf\\5.2.0\\include-fixed",
                 "c:\\users\\mg alarmas\\appdata\\local\\arduino15\\packages\\esp32\\tools\\xtensa-esp32-elf-gcc\\1.22.0-97-gc752ad5-5.2.0\\xtensa-esp32-elf\\include",
-                "c:\\users\\mg alarmas\\appdata\\local\\arduino15\\packages\\esp32\\tools\\xtensa-esp32-elf-gcc\\1.22.0-97-gc752ad5-5.2.0\\xtensa-esp32-elf\\sysroot\\usr\\include",
-                "c:\\Libraries"
+                "c:\\users\\mg alarmas\\appdata\\local\\arduino15\\packages\\esp32\\tools\\xtensa-esp32-elf-gcc\\1.22.0-97-gc752ad5-5.2.0\\xtensa-esp32-elf\\sysroot\\usr\\include"
             ],
             "forcedInclude": [
                 "C:\\Users\\MG Alarmas\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.6\\cores\\esp32\\Arduino.h"
