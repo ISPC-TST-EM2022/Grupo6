@@ -1,0 +1,948 @@
+[
+    {
+        "id": "39af5d9a.2fbf92",
+        "type": "tab",
+        "label": "Flow 5",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "a528e125.0a3c7",
+        "type": "inject",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "15",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "5",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 40,
+        "wires": [
+            [
+                "74098172.ebed3"
+            ]
+        ]
+    },
+    {
+        "id": "680efd88.84aab4",
+        "type": "ui_template",
+        "z": "39af5d9a.2fbf92",
+        "group": "5ff79597.ef5bdc",
+        "name": "Time and Temp",
+        "order": 2,
+        "width": 6,
+        "height": 4,
+        "format": "<script>\n    var daylist = [\"Domingo\", \"Lunes\", \"Martes\", \"Miercoles\", \"Jueves\", \"Viernes\", \"Sabado\"];\n    (function(scope){ \n            scope.$watch('msg', function(msg) {\n               if (typeof(msg.payload) != \"undefined\") $(\"#DSEGTemp\").text(msg.payload);\n               if (typeof(msg.colour) != \"undefined\") \n                            { \n                             if (msg.colour==\"orange\"){ $(\".Clock-Wrapper\").css('background-color', '#fb7c00');  $(\".lcdClock\").css('color', '#222'); } \n                             if (msg.colour==\"green\") { $(\".Clock-Wrapper\").css('background-color', '#66ac66');  $(\".lcdClock\").css('color', '#222'); }                            \n                             if (msg.colour==\"blue\")  { $(\".Clock-Wrapper\").css('background-color', '#8888ff');  $(\".lcdClock\").css('color', '#222'); }\n                             if (msg.colour==\"yellow\"){ $(\".Clock-Wrapper\").css('background-color', '#bbbb44');  $(\".lcdClock\").css('color', '#222'); } \n                             if (msg.colour==\"white\") { $(\".Clock-Wrapper\").css('background-color', '#aaaaaa');  $(\".lcdClock\").css('color', '#222'); } \n                             if (msg.colour==\"pink\")  { $(\".Clock-Wrapper\").css('background-color', '#ff8888');  $(\".lcdClock\").css('color', '#222'); } \n                             if (msg.colour==\"red\")  { $(\".Clock-Wrapper\").css('background-color', '#aa2222');  $(\".lcdClock\").css('color', '#ccaa22'); } \n                            }\n            });\n    })(scope);\n\n    function genTimerStrings(tm, num){\n    \n    \tvar i;\n    \tvar ret = tm.toString(10);\n    \tvar left = ret.length;\n    \n    \tif( left < num){\n    \t\tfor(i=0; i<( num - left ); i++ ){\n    \t\t\tret = String(0) + ret;\n    \t\t}\n    \t}\n    \treturn ret;\n    }\n\n    function updateTimer(){\n    \tvar ret;\n    \tvar date = new Date();\n    \tvar tm_year, tm_mon, tm_date, tm_hour, tm_min, tm_sec, tm_msec,tm_day;\n    \tvar colon;\n    \ttm_year = date.getFullYear();\n    \ttm_mon = date.getMonth()+1;\n    \ttm_date = date.getDate();\n    \ttm_day = date.getDay();\n    \ttm_hour = date.getHours();\n    \ttm_min = date.getMinutes();\n    \ttm_sec = date.getSeconds();\n    \ttm_msec = date.getMilliseconds();\n    \n    \ttm_mon = genTimerStrings(tm_mon, 2);\n    \ttm_date = genTimerStrings(tm_date, 2);\n    \ttm_hour = genTimerStrings(tm_hour, 2);\n    \ttm_min = genTimerStrings(tm_min, 2);\n    \ttm_sec = genTimerStrings(tm_sec, 2);\n    \ttm_day = daylist[tm_day];\n    \n    \tif( tm_msec > 499 ){\n    \t\tcolon = ' ';\n    \t}else{\n    \t\tcolon = ':';\n    \t}\n        colon = ':';\n    \tdocument.getElementById(\"DSEGClock\").innerHTML = tm_hour + colon + tm_min + colon + \"<span style=\\\"font-size:30px;\\\">\"  + tm_sec + \"</span>\";\n     \tdocument.getElementById(\"DSEGClock-Year\").innerHTML = \"<span class=\\\"D7MI\\\">\" + tm_date + \"-\" + tm_mon + \"-\" + tm_year + ' ' + \"</span><span class=\\\"D14MI\\\">\" + tm_day  + \"</span>\";\n    \n    \tsetTimeout(\"updateTimer()\", 500 - date.getMilliseconds()%500 );\n    }\n\n    updateTimer();\n</script>\n\n<style type=\"text/css\">\n.lcdClock {\n\tbackground-color:#fbfbfb;\n\tfont-size:100%;\n\tpadding-left:1px;\n\tpadding-right:1px;\n\tpadding-bottom:10px;\n\tmax-width:210px;\n\tline-height:120%;\n\tcolor:#222;\n\tfont-family:Meiryo, 'Lucida Grande','Hiragino Kaku Gothic ProN', sans-serif;\n\t\n\tmargin: 10px 50px; \n\twidth: 210px; \n\theight: 80px;\n\tuser-select: none;\n}\n\n@font-face {\n  font-family: \"D7MI\";\n  src: url(\"/myfonts/DSEG7Modern-Italic.woff\") format('woff');\n}\n\n@font-face {\n  font-family: \"D14MI\";\n  src: url(\"/myfonts/DSEG14Modern-Italic.woff\") format('woff');\n}\n\n@font-face {\n  font-family: \"D7MBI\";\n  src: url(\"/myfonts/DSEG7Modern-BoldItalic.woff\") format('woff');\n}\n\n@font-face {\n  font-family: \"DWEATHER\";\n  src: url(\"/myfonts/DSEGWeather.woff\") format('woff');\n}\n\n.D7MI {\nfont-family: \"D7MI\";\n}\n\n.D7MBI {\nfont-family: \"D7MBI\";\n}\n\n.D14MI {\nfont-family: \"D14MI\";\n}\n\n.DWEATHER {\nfont-family: \"DWEATHER\";\nfont-size:72px;\nheight:72px;\n}\n\n.Clock-Wrapper{\n\tposition:relative;\n\tborder:6px solid #000;\n\tborder-radius:9px;\n\theight:58px;\n\twidth:190px;\n/*\tbackground-color:#fb7c00;\n\tbackground-color:#66ac66;*/\n\tbackground-color: yellow;\n\tbox-shadow: 4px 4px 28px 0px rgba(0,0,0,0.3) inset; \n}\n\n.Clock-Time-Background{\n\tz-index:0;\n\tcolor:rgba(0,0,0,0);\n}\n\n.Clock-Time-Front{\n\tz-index:0;\n\tmargin: 0px 10px; \n\n}\n\n.Clock-Time-Background,.Clock-Time-Front {\n   \tposition:absolute;\n\ttop:38px;\n\tleft:5px; \n\tfont-size:42px;\n}\n\n.Clock-Year-Background{\n\tz-index:0;\n;\n\tcolor:rgba(0,0,0,0);\n\tfont-size:18px;\n}\n\n.Clock-Year-Front{\n\tz-index:0;\n\tmargin: 0px 10px;\n}\n\n.Clock-Year-Background,.Clock-Year-Front {\n   \tposition:absolute;\n\ttop:2px;\n\tleft:5px; \n\tfont-size:18px;\n}\n\n.temp { z-index:100; }\n.tempBack { z-index:50; color:rgba(0,0,0,0); }\n.temp,.tempBack {\n   \tposition:absolute;\n\ttop:28px;\n\tleft:210px; \n\tfont-size:42px;\n}\n\n.tempc { z-index:100; }\n.tempcBack { z-index:50; color:rgba(0,0,0,0); }\n.tempc,.tempcBack {\n   \tposition:absolute;\n\ttop:36px;\n\tleft:1px; \n\tfont-size:24px;\n}\n\n#DSEG7_OUTPUT{\n\tfont-family: \"D7MI\";\n}\n\n#DSEG14_OUTPUT{\n\tfont-family: \"D14MI\";\n}\n\n#DSEG14_OUTPUT, #DSEG7_OUTPUT{\n\tfont-size:18px;\n\tmargin-top:2px;\n\tmargin-bottom:10px;\n}\n\n</style>\n\n\n<div class=\"Clock-Wrapper center lcdClock\">\n\t<span class=\"Clock-Time-Background D7MBI\">88:88<span style=\"font-size:30px;\">:88</span></span>\n\t<span id=\"DSEGClock\" class=\"Clock-Time-Front D7MBI\"></span>\n\t<span class=\"Clock-Year-Background\"><span class=\"D7MI\">2088-88-88</span><span class=\"D14MI\"> ~~~</span></span>\n\t<span id=\"DSEGClock-Year\" class=\"Clock-Year-Front\"></span>\n\t\n\t\n</div>\n\n",
+        "storeOutMessages": true,
+        "fwdInMessages": false,
+        "resendOnRefresh": false,
+        "templateScope": "local",
+        "x": 560,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "74098172.ebed3",
+        "type": "moment",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "topic": "",
+        "input": "",
+        "inputType": "msg",
+        "inTz": "America/Cordoba",
+        "adjAmount": 0,
+        "adjType": "hours",
+        "adjDir": "add",
+        "format": "LLL",
+        "locale": "es-AR",
+        "output": "",
+        "outputType": "msg",
+        "outTz": "America/Cordoba",
+        "x": 360,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "df6c1f86.f76eb",
+        "type": "ui_gauge",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "group": "19eda593.c8b4ca",
+        "order": 1,
+        "width": 6,
+        "height": 5,
+        "gtype": "gage",
+        "title": "Temperatura DHT11",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "60",
+        "colors": [
+            "#0006b3",
+            "#00e62e",
+            "#f03000"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 540,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "c7df02d9.adb45",
+        "type": "ui_gauge",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "group": "43d68d7e.8af104",
+        "order": 1,
+        "width": 6,
+        "height": 5,
+        "gtype": "gage",
+        "title": "Humedad DHT11",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 530,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "37c6585f.b2cc78",
+        "type": "ui_chart",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "group": "772fed28.e2c7d4",
+        "order": 1,
+        "width": 3,
+        "height": 5,
+        "label": "Metros",
+        "chartType": "bar",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "2000",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": true,
+        "useUTC": false,
+        "colors": [
+            "#ff7f0e",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 490,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "898888f3.99cc58",
+        "type": "ui_text",
+        "z": "39af5d9a.2fbf92",
+        "group": "3ceb0c7d.b99514",
+        "order": 1,
+        "width": 6,
+        "height": 1,
+        "name": "",
+        "label": "Latitud : ",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 500,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "76f99791.f736d8",
+        "type": "ui_text",
+        "z": "39af5d9a.2fbf92",
+        "group": "3ceb0c7d.b99514",
+        "order": 2,
+        "width": 6,
+        "height": 1,
+        "name": "",
+        "label": "Longitud : ",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 500,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "2b8511aa.bd5dbe",
+        "type": "ui_text",
+        "z": "39af5d9a.2fbf92",
+        "d": true,
+        "group": "3ceb0c7d.b99514",
+        "order": 3,
+        "width": 6,
+        "height": 1,
+        "name": "",
+        "label": "Velocidad : ",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 510,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "2c1500e3.a73bd",
+        "type": "mqtt in",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "topic": "/ispc/grupo6/temperatura/",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "8d2c015f.b15cb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 250,
+        "y": 180,
+        "wires": [
+            [
+                "df6c1f86.f76eb",
+                "7b606951.dc8578"
+            ]
+        ]
+    },
+    {
+        "id": "cb758999.ffc098",
+        "type": "mqtt in",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "topic": "/ispc/grupo6/humedad/",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "8d2c015f.b15cb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 240,
+        "y": 280,
+        "wires": [
+            [
+                "c7df02d9.adb45",
+                "109c53aa.ca7e1c"
+            ]
+        ]
+    },
+    {
+        "id": "8aa146db.f8d6f8",
+        "type": "mqtt in",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "topic": "/ispc/grupo6/altura/",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "8d2c015f.b15cb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 230,
+        "y": 480,
+        "wires": [
+            [
+                "37c6585f.b2cc78",
+                "630cba12.7e5d64"
+            ]
+        ]
+    },
+    {
+        "id": "223f82c8.b49b0e",
+        "type": "mqtt in",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "topic": "/ispc/grupo6/latitud/",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "8d2c015f.b15cb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 230,
+        "y": 580,
+        "wires": [
+            [
+                "898888f3.99cc58",
+                "e3e42521.060668"
+            ]
+        ]
+    },
+    {
+        "id": "6cda2789.1c9578",
+        "type": "mqtt in",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "topic": "/ispc/grupo6/longitud/",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "8d2c015f.b15cb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 240,
+        "y": 680,
+        "wires": [
+            [
+                "76f99791.f736d8",
+                "f27544e5.48c1e8"
+            ]
+        ]
+    },
+    {
+        "id": "bf11d5e4.299da8",
+        "type": "mqtt in",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "topic": "/ispc/grupo6/velocidad/",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "8d2c015f.b15cb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 240,
+        "y": 780,
+        "wires": [
+            [
+                "2b8511aa.bd5dbe",
+                "90332303.b4614"
+            ]
+        ]
+    },
+    {
+        "id": "7b606951.dc8578",
+        "type": "debug",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "109c53aa.ca7e1c",
+        "type": "debug",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "630cba12.7e5d64",
+        "type": "debug",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "e3e42521.060668",
+        "type": "debug",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "f27544e5.48c1e8",
+        "type": "debug",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "90332303.b4614",
+        "type": "debug",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "dcd01b7d.4fcb18",
+        "type": "ui_gauge",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "group": "86ce26f.4451bd8",
+        "order": 1,
+        "width": 6,
+        "height": 5,
+        "gtype": "gage",
+        "title": "Presion Atmosferica BMP280",
+        "label": "hPa",
+        "format": "{{value}}",
+        "min": "800",
+        "max": "1100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 560,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "532c957c.5eef4c",
+        "type": "mqtt in",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "topic": "/ispc/grupo6/presion/",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "8d2c015f.b15cb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 230,
+        "y": 380,
+        "wires": [
+            [
+                "dcd01b7d.4fcb18",
+                "12881930.60e817"
+            ]
+        ]
+    },
+    {
+        "id": "12881930.60e817",
+        "type": "debug",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "981d368c.899ac8",
+        "type": "mysql",
+        "z": "39af5d9a.2fbf92",
+        "mydb": "e408b597.dd48a8",
+        "name": "",
+        "x": 520,
+        "y": 880,
+        "wires": [
+            [
+                "c21e3204.a14fc"
+            ]
+        ]
+    },
+    {
+        "id": "c21e3204.a14fc",
+        "type": "debug",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 730,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "39d70ce8.192414",
+        "type": "inject",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "12,89",
+        "payloadType": "str",
+        "x": 170,
+        "y": 880,
+        "wires": [
+            [
+                "e371e64f.3be7d8"
+            ]
+        ]
+    },
+    {
+        "id": "e371e64f.3be7d8",
+        "type": "function",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "func": "var0 = msg.payload[0-4]\nvar1 = 8\nvar2 = 8\nvar3 = 8\nmsg.topic = \"INSERT INTO registrar(prueba0,prueba1,prueba2,prueba3) VALUES ('\"+var0+\"','\"+var1+\"','\"+var2+\"','\"+var3+\"')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 880,
+        "wires": [
+            [
+                "981d368c.899ac8"
+            ]
+        ]
+    },
+    {
+        "id": "d93075f7.6042b8",
+        "type": "ui_button",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "group": "18b7a7fd.324088",
+        "order": 2,
+        "width": 7,
+        "height": 1,
+        "passthru": false,
+        "label": "Actualizar BD",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "pink",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 140,
+        "y": 980,
+        "wires": [
+            [
+                "35447c65.2e08e4"
+            ]
+        ]
+    },
+    {
+        "id": "2614183a.feed08",
+        "type": "mysql",
+        "z": "39af5d9a.2fbf92",
+        "mydb": "e408b597.dd48a8",
+        "name": "",
+        "x": 520,
+        "y": 980,
+        "wires": [
+            [
+                "f7f577a0.ec0dc8",
+                "f49ffaa3.7efae8"
+            ]
+        ]
+    },
+    {
+        "id": "f7f577a0.ec0dc8",
+        "type": "debug",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "35447c65.2e08e4",
+        "type": "function",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "func": "msg.topic = \"SELECT * FROM registrar\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 980,
+        "wires": [
+            [
+                "2614183a.feed08"
+            ]
+        ]
+    },
+    {
+        "id": "f49ffaa3.7efae8",
+        "type": "ui_table",
+        "z": "39af5d9a.2fbf92",
+        "group": "18b7a7fd.324088",
+        "name": "",
+        "order": 1,
+        "width": 24,
+        "height": 3,
+        "columns": [],
+        "outputs": 0,
+        "cts": false,
+        "x": 690,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "b7dff285.69049",
+        "type": "inject",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[{\"DHT11_T\":\"<b>18</b>\",\"DHT11_H\":\"32\",\"Color\":\"lime\",\"Prog\":70,\"Star\":\"3\"},{\"Name\":\"<i>DCJ</i>\",\"Age\":\"50\",\"Color\":\"dodgerblue\",\"Prog\":\"3\",\"Star\":2,\"Pass\":false,\"web\":\"\"},{\"Name\":\"Nick\",\"Age\":\"40\",\"Color\":\"darkred\",\"Prog\":95,\"Star\":\"5\",\"Pass\":true,\"web\":\"http://nodered.org\"},{\"Name\":\"Oli\"}]",
+        "payloadType": "json",
+        "x": 230,
+        "y": 1120,
+        "wires": [
+            [
+                "7d48e13.90ee22"
+            ]
+        ]
+    },
+    {
+        "id": "cb53cb76.5fd0d8",
+        "type": "inject",
+        "z": "39af5d9a.2fbf92",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[{\"Name\":\"<b>Yokoi</b>\",\"Age\":\"30\",\"Color\":\"lime\",\"Prog\":20,\"Star\":\"1\"},{\"Name\":\"<i>DCJ</i>\",\"Age\":\"50\",\"Color\":\"dodgerblue\",\"Prog\":\"80\",\"Star\":4,\"Pass\":true,\"web\":\"\"},{\"Name\":\"Nick\",\"Age\":\"40\",\"Color\":\"red\",\"Prog\":90,\"Star\":\"5\",\"Pass\":true,\"web\":\"http://nodered.org\"},{\"Name\":\"Oli\"}]",
+        "payloadType": "json",
+        "x": 230,
+        "y": 1160,
+        "wires": [
+            [
+                "7d48e13.90ee22"
+            ]
+        ]
+    },
+    {
+        "id": "7d48e13.90ee22",
+        "type": "ui_table",
+        "z": "39af5d9a.2fbf92",
+        "group": "571a38b1.5e3638",
+        "name": "People",
+        "order": 1,
+        "width": 6,
+        "height": 3,
+        "columns": [
+            {
+                "field": "DHT11_T",
+                "title": "°C",
+                "width": "10%",
+                "align": "center",
+                "formatter": "html",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "DHT11_H",
+                "title": "Hm",
+                "width": "10%",
+                "align": "center",
+                "formatter": "html",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "BMP_280",
+                "title": "°C",
+                "width": "10%",
+                "align": "center",
+                "formatter": "color",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "BMP_280",
+                "title": "hPa",
+                "width": "80",
+                "align": "left",
+                "formatter": "html",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "Pass",
+                "title": "",
+                "width": "5%",
+                "align": "center",
+                "formatter": "tickCross",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "Prog",
+                "title": "",
+                "width": "80",
+                "align": "left",
+                "formatter": "progress",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "web",
+                "title": "URL",
+                "width": "",
+                "align": "left",
+                "formatter": "traffic",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            }
+        ],
+        "outputs": 0,
+        "cts": false,
+        "x": 440,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "5ff79597.ef5bdc",
+        "type": "ui_group",
+        "name": "Reloj",
+        "tab": "14d610c0.80a7cf",
+        "order": 1,
+        "disp": false,
+        "width": 6,
+        "collapse": false
+    },
+    {
+        "id": "19eda593.c8b4ca",
+        "type": "ui_group",
+        "name": "Temperatura",
+        "tab": "14d610c0.80a7cf",
+        "order": 2,
+        "disp": false,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "43d68d7e.8af104",
+        "type": "ui_group",
+        "name": "Humedad",
+        "tab": "14d610c0.80a7cf",
+        "order": 3,
+        "disp": false,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "772fed28.e2c7d4",
+        "type": "ui_group",
+        "d": true,
+        "name": "Altitud BMP280",
+        "tab": "14d610c0.80a7cf",
+        "order": 5,
+        "disp": true,
+        "width": "3",
+        "collapse": false
+    },
+    {
+        "id": "3ceb0c7d.b99514",
+        "type": "ui_group",
+        "d": true,
+        "name": "Posicion geografica",
+        "tab": "14d610c0.80a7cf",
+        "order": 6,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "8d2c015f.b15cb",
+        "type": "mqtt-broker",
+        "name": "MQTT / grupo6",
+        "broker": "mgalarmasserver1.ddns.net",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "86ce26f.4451bd8",
+        "type": "ui_group",
+        "name": "Presion",
+        "tab": "14d610c0.80a7cf",
+        "order": 4,
+        "disp": false,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "e408b597.dd48a8",
+        "type": "MySQLdatabase",
+        "name": "Invernadero_2",
+        "host": "mgalarmasserver1.ddns.net",
+        "port": "3306",
+        "db": "tst_invernadero_grupo6",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "18b7a7fd.324088",
+        "type": "ui_group",
+        "name": "Base de datos",
+        "tab": "14d610c0.80a7cf",
+        "order": 7,
+        "disp": true,
+        "width": 24,
+        "collapse": false
+    },
+    {
+        "id": "571a38b1.5e3638",
+        "type": "ui_group",
+        "name": "Base de datos ",
+        "tab": "29ec6908.552b36",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false
+    },
+    {
+        "id": "14d610c0.80a7cf",
+        "type": "ui_tab",
+        "name": "ISPC Grupo 6 Invernadero Hidroponico",
+        "icon": "dashboard",
+        "order": 6,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "29ec6908.552b36",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "track_changes",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]
