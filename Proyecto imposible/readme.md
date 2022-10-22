@@ -4,5 +4,5 @@
 ![Diapositiva4](https://user-images.githubusercontent.com/59898130/196833641-e76438de-db48-46dc-b7f4-9bd502bf6510.JPG)
 ![Diapositiva5](https://user-images.githubusercontent.com/59898130/196833651-93b8ded4-ba86-40e2-9ceb-bb3701fadf5e.JPG)
 ![Diapositiva6](https://user-images.githubusercontent.com/59898130/196833663-67591e83-9b3e-4c1c-825a-426952544479.JPG)
-![fuente](https://user-images.githubusercontent.com/59898130/197090777-f7f80d05-befd-444d-aa82-4aad0100cdf6.png)
+
 ![Diapositiva3](https://user-images.githubusercontent.com/59898130/197090832-9157fdfe-ec7c-4ef6-adfd-1cc4470f3a99.JPG)
