@@ -11,8 +11,8 @@
                 "c:\\libraries"
             ],
             "forcedInclude": [],
-            "cStandard": "",
-            "cppStandard": "",
+            "cStandard": "c11",
+            "cppStandard": "c++11",
             "defines": [
                 "_DEBUG",
                 "UNICODE",
