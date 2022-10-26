@@ -27,12 +27,6 @@ WiFiClient esp32_Client;                            // creacion de objeto wifi c
 PubSubClient client(esp32_Client);                  // creacion de objeto pubsunclient
 
 
-
-
-
-
-
-
 void setup(){
     Serial.begin(9600);                             // puerto serial nativo 9600
     WiFi.begin(ssid, password);                     // conecto al wifi del lugar (micasa)
@@ -40,7 +34,6 @@ void setup(){
     bmp.begin(BMP280_ADDRESS_ALT, BMP280_CHIPID);   // iniciamos el objeto sensor en la direccion alterna 0x77
     lcd.init();                                     // Inicializo el LCD I2C
     bienvenido();
-
 
     while (WiFi.status() != WL_CONNECTED)           // inicio conexion
     {   
@@ -71,32 +64,34 @@ void setup(){
 
 void loop(){
 
-    float t = dht.readTemperature();
-    String temp1 = String(t,2);
-    int str_len1 = temp1.length() + 1;
-    char envio1[str_len1];
-    temp1.toCharArray(envio1, str_len1);
-    client.publish("/grupo6/invernadero/DHT11_T/",envio1);
-    Serial.print(envio1);
+    float t1 = dht.readTemperature();        // adquirimos temperatura del DHT11
+    String temp1 = String(t1,2);             // Convierto el float a string
+    int str_len1 = temp1.length() + 1;      // cargo el largo del float a una variable
+    char envio1[str_len1];                  // cargo el largo de la temepratura en al arreglo
+    temp1.toCharArray(envio1, str_len1);    // convierto el envio1 en arreglo y del largo de temp1
+    client.publish("/grupo6/invernadero/DHT11_T/",envio1); // publico en el broker el topico y el arreglo 
+    Serial.print(envio1);                   // publico en el serial
 
-    float h = dht.readHumidity();
-    String hume = String(h,2);
-    int str_len2 = hume.length() + 1;
-    char envio2[str_len2];
-    hume.toCharArray(envio2, str_len2);
-    client.publish("/grupo6/invernadero/DHT11_H/",envio2);
-    Serial.print(envio2);
-    
-   
+    float h = dht.readHumidity();           // adquirimos humedad del DHT11
+    String hume = String(h,2);              // Convierto el float a string
+    int str_len2 = hume.length() + 1;       // cargo el largo de la humedad en una variable
+    char envio2[str_len2];                  // cargo el largo de la humedad en el arreglo
+    hume.toCharArray(envio2, str_len2);     // convierto el envio2 en arreglo y del largo de hume
+    client.publish("/grupo6/invernadero/DHT11_H/",envio2);// publico en el broker el topico y el arreglo
+    Serial.print(envio2);                   // publico en el serial
 
-
-
-
+    float t2 = bmp.readTemperature();       // adquirimos temperatura del BMP280
+    String temp2 = String(t2,2);            // Convierto el float a string
+    int str_len3 = temp2.length() + 1;      // cargo el largo del float a una variable
+    char envio3[str_len3];                  // cargo el largo de la temepratura en al arreglo
+    temp2.toCharArray(envio3, str_len3);    // convierto el envio3 en arreglo y del largo de temp1
+    client.publish("/grupo6/invernadero/BMP280_T/", envio3); // publico en el broker el topico y el arreglo 
+    Serial.print(envio3);                   // publico en el serial
+         
 
 
 
     client.publish("/grupo6/invernadero/BMP280_P/","970");
-    client.publish("/grupo6/invernadero/BMP280_T/","28.1");
     client.publish("/grupo6/invernadero/deposito/","60 %");
     //Serial.print(bmp.readTemperature());     // recupero del objeto el metodo readTemperatura
     //Serial.println(" *C");                   // imprimo C de centigrado al final del renglon y hago CR/LF
@@ -115,7 +110,7 @@ void loop(){
        if (!client.connected()) // si la conexion esta negada reconecto
          reconnect();
     // client.loop();
-    delay(10000);
+    delay(5000);
 }
 
 void callback(char *topic, byte *payload, unsigned int length)
@@ -136,11 +131,11 @@ void reconnect() {
 }
 
 void bienvenido(){
-    lcd.backlight(); 
-    lcd.clear();                               // Encendemos el backlite
-    lcd.setCursor(3,0);
-    lcd.print("Grupo 6");
-    lcd.setCursor(3,1);
+    lcd.backlight();                            // Encendemos el backlight
+    lcd.clear();                                // limpiamos el lcd
+    lcd.setCursor(3,0);                         // posicionamos el cursor    
+    lcd.print("Grupo 6");                       // imprimimos
+    lcd.setCursor(3,1);                         // posicionamos el cursor 
     lcd.print("Proyecto Imposible");
     lcd.setCursor(0,2);
     lcd.print("Controlador de Invernadero");
