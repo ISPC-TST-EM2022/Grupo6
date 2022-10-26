@@ -40,9 +40,10 @@ void setup(){
     WiFi.begin(ssid, password);                     // conecto al wifi del lugar (micasa)
     dht.begin();                                    // inicio el DHT11
     bmp.begin(BMP280_ADDRESS_ALT, BMP280_CHIPID);   // iniciamos el objeto sensor en la direccion alterna 0x77
-    Serial.println(F("DHTxx test!"));
     lcd.init();                                     // Inicializo el LCD I2C
-    lcd.backlight();
+    bienvenido();
+
+
     while (WiFi.status() != WL_CONNECTED)           // inicio conexion
     {   
         delay(1500);                                // demora para reintentar
@@ -63,7 +64,6 @@ void setup(){
     client.setServer(mqtt_server, mqtt_port);       // estableco conexion al server mwtt (ISPC)
     client.setCallback(callback);                   // inicio el callback de server mqtt y espero datos
  
-
 }
 
 
@@ -79,6 +79,7 @@ void loop(){
     char envio1[str_len1];
     temp1.toCharArray(envio1, str_len1);
     client.publish("/grupo6/invernadero/DHT11_T/",envio1);
+    Serial.print(envio1);
 
     float h = dht.readHumidity();
     String hume = String(h,2);
@@ -86,12 +87,16 @@ void loop(){
     char envio2[str_len2];
     hume.toCharArray(envio2, str_len2);
     client.publish("/grupo6/invernadero/DHT11_H/",envio2);
+    Serial.print(envio2);
     
-    
+   
 
-    // Serial.print(h);
-    // Serial.print(t);
-    
+
+
+
+
+
+
     client.publish("/grupo6/invernadero/BMP280_P/","970");
     client.publish("/grupo6/invernadero/BMP280_T/","28.1");
     client.publish("/grupo6/invernadero/deposito/","60 %");
@@ -101,14 +106,14 @@ void loop(){
 //   Serial.print(bmp.readPressure() / 100);  // recupero del objeto el metodo readPressure y divido para Hectopascal
 //   Serial.println(" hPa");                  // imprimo Hectopascal
 //   Serial.println();               // imprimo CRyLF
-  digitalWrite(LED_BUILTIN, HIGH);// Enciendo led azul
-  delay(100);
-  digitalWrite(LED_BUILTIN, LOW); // apago led azul
-  delay(100);
-  digitalWrite(LED_BUILTIN, HIGH);// Enciendo led azul
-  delay(100);
-  digitalWrite(LED_BUILTIN, LOW); // apago led azul
-  delay(3000);
+    digitalWrite(LED_BUILTIN, HIGH);// Enciendo led azul
+    delay(100);
+    digitalWrite(LED_BUILTIN, LOW); // apago led azul
+    delay(100);
+    digitalWrite(LED_BUILTIN, HIGH);// Enciendo led azul
+    delay(100);
+    digitalWrite(LED_BUILTIN, LOW); // apago led azul
+    delay(3000);
        if (!client.connected()) // si la conexion esta negada reconecto
          reconnect();
     // client.loop();
@@ -130,4 +135,18 @@ void reconnect() {
   }
   delay(5000);
 }
+}
+
+void bienvenido(){
+    lcd.backlight(); 
+    lcd.clear();                               // Encendemos el backlite
+    lcd.setCursor(3,0);
+    lcd.print("Grupo 6");
+    lcd.setCursor(3,1);
+    lcd.print("Proyecto Imposible");
+    lcd.setCursor(0,2);
+    lcd.print("Controlador de Invernadero");
+    lcd.setCursor(3,3);
+    lcd.print("Hidroponico");
+
 }
