@@ -12,10 +12,8 @@
 #include <DHT.h>                // incluimos libreria de DHT11
 #include <LiquidCrystal_I2C.h>  // incluimos libreria de LCD 20x4 I2C
 
-//const char *ssid = "TP-LINK_B33E";                // red de wifi a la que me conecto
-//const char *password = "50868155";                // password de la red de wifi
-const char *ssid = "MGAlarmas";                // red de wifi a la que me conecto
-const char *password = "mgalarmas3040";                // password de la red de wifi
+const char *ssid = "TP-LINK_B33E";                // red de wifi a la que me conecto
+const char *password = "50868155";                // password de la red de wifi
 const char *mqtt_server = "mgalarmasserver1.ddns.net"; // dns del server mosquitto (MQTT)
 unsigned int mqtt_port = 1883;                      // socket port del server MQTT Mosquitto
 const char *Topico = "/Grupo6/invernadero/";        // topico para publicar los datos en el server
@@ -89,7 +87,7 @@ void loop(){
     temp2.toCharArray(envio3, str_len3);    // convierto el envio3 en arreglo y del largo de temp1
     client.publish("/grupo6/invernadero/BMP280_T/", envio3); // publico en el broker el topico y el arreglo 
     Serial.print(envio3);                   // publico en el serial
-
+         
 
 
 
