@@ -34,13 +34,17 @@ digitalWrite(13, !digitalRead(13));
 digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
 }
 
+void ICACHE_RAM_ATTR bd_mysql(){
+// aca va el sql de guada en BD mysql
+}
+
 void setup(){
     Serial.begin(9600);                             // puerto serial nativo 9600
     WiFi.begin(ssid, password);                     // conecto al wifi del lugar (micasa)
     dht.begin();                                    // inicio el DHT11
     bmp.begin();                                    // iniciamos el objeto sensor en la direccion alterna 0x77
     //lcd.init();                                   // Inicializo el LCD I2C
-    bienvenido();
+    //bienvenido();
 
     while (WiFi.status() != WL_CONNECTED)           // inicio conexion
     {   
@@ -49,28 +53,29 @@ void setup(){
     client.setServer(mqtt_server, mqtt_port);       // estableco conexion al server mwtt (ISPC)
     client.setCallback(callback);                   // inicio el callback de server mqtt y espero datos
  
-    /*----------------------------------------------------------------*/
-    /* configurar de fabrica segun datasheet ADAFRUIT Library */
-    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
-                    Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
-                    Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
-                    Adafruit_BMP280::FILTER_X16,      /* Filtering. */
-                    Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
-    /*----------------------------------------------------------------*/   
+    /*------------------------------------------------------------------*/
+    /* configurar de fabrica segun datasheet ADAFRUIT Library           */
+    /*------------------------------------------------------------------*/
+    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,       // Operating Mode. 
+                    Adafruit_BMP280::SAMPLING_X2,       // Temp. oversampling 
+                    Adafruit_BMP280::SAMPLING_X16,      // Pressure oversampling
+                    Adafruit_BMP280::FILTER_X16,        // Filtering.
+                    Adafruit_BMP280::STANDBY_MS_500);   // Standby time.
+    /*------------------------------------------------------------------*/  
 
     pinMode(LED_BUILTIN, OUTPUT);                   // el pin 2 como salida para el led azul de la placa
     client.setServer(mqtt_server, mqtt_port);       // estableco conexion al server mwtt (ISPC)
     client.setCallback(callback);                   // inicio el callback de server mqtt y espero datos
-    timer.attach(20,controlarBomba);                // timpo de espera en segundos, nombre de la funcion que llama
+    timer.attach(900,controlarBomba);               // timpo de espera en segundos, enciende la bomba
+    timer.attach(300,bd_mysql);                     // timpo de espera en segundos, guarda bd mysql
  }
 
 void loop(){
 
-
     float t1 = dht.readTemperature();               // adquirimos temperatura del DHT11
     String temp1 = String(t1,2);                    // Convierto el float a string
     int str_len1 = temp1.length() + 1;              // cargo el largo del float a una variable
-    char envio1[str_len1];                          // cargo el largo de la temepratura en al arreglo
+    char envio1[str_len1];                          // cargo el largo de la temperatura en al arreglo
     temp1.toCharArray(envio1, str_len1);            // convierto el envio1 en arreglo y del largo de temp1
     client.publish("/grupo6/invernadero/DHT11_T/",envio1); // publico en el broker el topico y el arreglo 
     Serial.print(envio1);                           // publico en el serial
@@ -86,16 +91,15 @@ void loop(){
     float t2 = bmp.readTemperature();               // adquirimos temperatura del BMP280
     String temp2 = String(t2,2);                    // Convierto el float a string
     int str_len3 = temp2.length() + 1;              // cargo el largo del float a una variable
-    char envio3[str_len3];                          // cargo el largo de la temepratura en al arreglo
+    char envio3[str_len3];                          // cargo el largo de la temperatura en al arreglo
     temp2.toCharArray(envio3, str_len3);            // convierto el envio3 en arreglo y del largo de temp1
     client.publish("/grupo6/invernadero/BMP280_T/", envio3); // publico en el broker el topico y el arreglo 
     Serial.print(envio3);                           // publico en el serial
-         
 
     float p = (bmp.readPressure() / 100);           // adquirimos temperatura del BMP280
     String pres = String(p,2);                      // Convierto el float a string
     int str_len4 = pres.length() + 1;               // cargo el largo del float a una variable
-    char envio4[str_len4];                          // cargo el largo de la temepratura en al arreglo
+    char envio4[str_len4];                          // cargo el largo de la temperatura en al arreglo
     temp2.toCharArray(envio4, str_len4);            // convierto el envio3 en arreglo y del largo de temp1
     client.publish("/grupo6/invernadero/BMP280_P/", envio4); // publico en el broker el topico y el arreglo 
     Serial.print(envio4);                           // publico en el serial
@@ -103,10 +107,10 @@ void loop(){
 
     client.publish("/grupo6/invernadero/deposito/","60 %");
 
-       if (!client.connected())             // si la conexion esta negada reconecto
-         reconnect();
-    // client.loop();
-    delay(5000);
+       if (!client.connected())                     // si la conexion esta negada reconecto
+        reconnect();
+        // client.loop();
+        delay(5000);
 }
 
 void callback(char *topic, byte *payload, unsigned int length)
@@ -115,15 +119,14 @@ void callback(char *topic, byte *payload, unsigned int length)
     // en este caso no se usa
 }
 
-
-void reconnect() {
-  while (!client.connected()) {
-    String clientId = "Grupo6";
-    clientId += String(random(0xffff), HEX);
-     if (client.connect(clientId.c_str())){
-  }
-  delay(5000);
-}
+void reconnect()
+{
+    while (!client.connected()){                // si la conexion esta negada reconecto
+        String clientId = "Grupo6";             // genero el usuario
+        clientId += String(random(0xffff), HEX);// genero parte del usuario random
+        if (client.connect(clientId.c_str())){}     
+        delay(5000);                            // demora de la conexion
+    }
 }
 
 void bienvenido(){
@@ -132,11 +135,11 @@ void bienvenido(){
     lcd.setCursor(3,0);                         // posicionamos el cursor    
     lcd.print("Grupo 6");                       // imprimimos
     lcd.setCursor(3,1);                         // posicionamos el cursor 
-    lcd.print("Proyecto Imposible");
-    lcd.setCursor(0,2);
-    lcd.print("Controlador de Invernadero");
-    lcd.setCursor(3,3);
-    lcd.print("Hidroponico");
+    lcd.print("Proyecto Imposible");            // imprimimos
+    lcd.setCursor(0,2);                         // posicionamos el cursor
+    lcd.print("Controlador de Invernadero");    // imprimimos
+    lcd.setCursor(3,3);                         // posicionamos el cursor
+    lcd.print("Hidroponico");                   // imprimimos
 
 }
 
