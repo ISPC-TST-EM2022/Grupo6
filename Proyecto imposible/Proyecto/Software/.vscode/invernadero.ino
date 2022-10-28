@@ -13,12 +13,8 @@
 #include <LiquidCrystal_I2C.h>  // incluimos libreria de LCD 20x4 I2C
 #include <Ticker.h>
 
-//const char *ssid = "TP-LINK_B33E";                    // red de wifi a la que me conecto
-//const char *password = "50868155";                    // password de la red de wifi
-
-const char *ssid = "MG Alarmas";                         // red de wifi a la que me conecto
-const char *password = "mgalarmas2319";                 // password de la red de wifi
-
+const char *ssid = "TP-LINK_B33E";                    // red de wifi a la que me conecto
+const char *password = "50868155";                    // password de la red de wifi
 
 const char *mqtt_server = "mgalarmasserver1.ddns.net"; // dns del server mosquitto (MQTT)
 unsigned int mqtt_port = 1883;                      // socket port del server MQTT Mosquitto
