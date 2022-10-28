@@ -13,19 +13,20 @@
 #include <LiquidCrystal_I2C.h>  // incluimos libreria de LCD 20x4 I2C
 #include <Ticker.h>
 
-const char *ssid = "TP-LINK_B33E";                    // red de wifi a la que me conecto
-const char *password = "50868155";                    // password de la red de wifi
+const char *ssid = "TP-LINK_B33E";                // red de wifi a la que me conecto
+const char *password = "50868155";                // password de la red de wifi
 
 const char *mqtt_server = "mgalarmasserver1.ddns.net"; // dns del server mosquitto (MQTT)
 unsigned int mqtt_port = 1883;                      // socket port del server MQTT Mosquitto
 const char *Topico = "/Grupo6/invernadero/";        // topico para publicar los datos en el server
 int flotante=33;
 int bomba= 27;
-int detector= 8;
+int detector= 4;
 #define DHTPIN 26 
 #define DHTTYPE DHT11           // DHT 11
 DHT dht(DHTPIN, DHTTYPE);
-LiquidCrystal_I2C lcd(0x27, 20, 4);
+
+LiquidCrystal_I2C lcd(0x27,20,4);
 Adafruit_BMP280 bmp;                                // creamos el objeto bmp
 Ticker timer;                                       // Temporizador
 
@@ -36,20 +37,20 @@ void ICACHE_RAM_ATTR controlarBomba(){
     digitalWrite(bomba, !digitalRead(bomba));
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
     if (digitalRead(bomba) == 0){
-        client.publish("/grupo6/invernadero/bomba/", "0");
+        client.publish("/grupo6/invernadero/bomba/","0");
     }else{
-        client.publish("/grupo6/invernadero/bomba/", "1");
+        client.publish("/grupo6/invernadero/bomba/","1");
     }
 }
 
-// void ICACHE_RAM_ATTR bd_mysql(){
-// // aca va el sql de guada en BD mysql
-// }
+void ICACHE_RAM_ATTR bd_mysql(){
+// aca va el sql de guarda en BD mysql
+ }
 
 void setup(){
-    pinMode(flotante,INPUT_PULLUP);                        // declaro el pin del flotante como entrada
+    pinMode(flotante,INPUT_PULLUP);                 // declaro el pin del flotante como entrada
     pinMode(bomba, OUTPUT);                         // se declara pin bomba como salida
-    pinMode(detector, INPUT_PULLUP);                       // se declara el pin sensor como entrada
+    pinMode(detector, INPUT_PULLUP);                // se declara el pin sensor como entrada
     pinMode(LED_BUILTIN, OUTPUT);                   // el pin 2 como salida para el led azul de la placa
     Serial.begin(9600);                             // puerto serial nativo 9600
     WiFi.begin(ssid, password);                     // conecto al wifi del lugar (micasa)
@@ -57,9 +58,9 @@ void setup(){
     bmp.begin(BMP280_ADDRESS_ALT, BMP280_CHIPID);   // iniciamos el objeto sensor en la direccion alterna 0x77
     lcd.init();                                     // Inicializo el LCD I2C
     bienvenido();
-     while (WiFi.status() != WL_CONNECTED)           // inicio conexion
+     while (WiFi.status() != WL_CONNECTED)          // inicio conexion
       {   
-          delay(1500);                                // demora para reintentar
+          delay(1500);                              // demora para reintentar
           digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
       }
  
@@ -74,12 +75,11 @@ void setup(){
     /*------------------------------------------------------------------*/  
 
     client.setServer(mqtt_server, mqtt_port);       // estableco conexion al server mwtt (ISPC)
-    // client.setCallback(callback);                   // inicio el callback de server mqtt y espero datos
-    timer.attach(20,controlarBomba); //900              // tiempo de espera en segundos, enciende la bomba
-    //timer.attach(300,bd_mysql);                     // tiempo de espera en segundos, guarda bd mysql
-    lcd.clear();                                // limpiamos el lcd
-
- }
+    // client.setCallback(callback);                // inicio el callback de server mqtt y espero datos
+    timer.attach(300,controlarBomba); //900         // tiempo de espera en segundos, enciende la bomba
+    timer.attach(300,bd_mysql);                     // tiempo de espera en segundos, guarda bd mysql
+    lcd.clear();                                    // limpiamos el lcd
+}
 
 void loop(){
 
@@ -91,20 +91,8 @@ void loop(){
     client.publish("/grupo6/invernadero/DHT11_T/",envio1); // publico en el broker el topico y el arreglo 
     Serial.print(envio1);                           // publico en el serial
     lcd.setCursor(0,0);                             // posicionamos el cursor    
-    lcd.print("T: ");
-    lcd.print(envio1);                          // imprimimos
-
-    float h = dht.readHumidity();                   // adquirimos humedad del DHT11
-    String hume = String(h,2);                      // Convierto el float a string
-    int str_len2 = hume.length() + 1;               // cargo el largo de la humedad en una variable
-    char envio2[str_len2];                          // cargo el largo de la humedad en el arreglo
-    hume.toCharArray(envio2, str_len2);             // convierto el envio2 en arreglo y del largo de hume
-    client.publish("/grupo6/invernadero/DHT11_H/",envio2);// publico en el broker el topico y el arreglo
-    Serial.print(envio2);                           // publico en el serial
-    lcd.setCursor(0,1);                             // posicionamos el cursor    
-    lcd.print("Hr: ");
-    lcd.print(envio2);  
-    lcd.print("%");
+    lcd.print("T:");
+    lcd.print(envio1);                              // imprimimos
 
     float t2 = bmp.readTemperature();               // adquirimos temperatura del BMP280
     String temp2 = String(t2,2);                    // Convierto el float a string
@@ -115,43 +103,64 @@ void loop(){
     Serial.print(envio3);                           // publico en el serial
     lcd.setCursor(8,0);                             // posicionamos el cursor    
     lcd.print("T:");
-    lcd.print(envio3);                         // imprimimos
+    lcd.print(envio3);                              // imprimimos
 
-
+    float h = dht.readHumidity();                   // adquirimos humedad del DHT11
+    String hume = String(h,2);                      // Convierto el float a string
+    int str_len2 = hume.length() + 1;               // cargo el largo de la humedad en una variable
+    char envio2[str_len2];                          // cargo el largo de la humedad en el arreglo
+    hume.toCharArray(envio2, str_len2);             // convierto el envio2 en arreglo y del largo de hume
+    client.publish("/grupo6/invernadero/DHT11_H/",envio2);// publico en el broker el topico y el arreglo
+    Serial.print(envio2);                           // publico en el serial
+    lcd.setCursor(1,1);                             // posicionamos el cursor    
+    lcd.print("Hr: ");
+    lcd.print(envio2);  
+    lcd.print("%");
 
     float p = (bmp.readPressure() / 100);           // adquirimos temperatura del BMP280
     String pres = String(p,2);                      // Convierto el float a string
     int str_len4 = pres.length() + 1;               // cargo el largo del float a una variable
     char envio4[str_len4];                          // cargo el largo de la temperatura en al arreglo
-    pres.toCharArray(envio4, str_len4);            // convierto el envio3 en arreglo y del largo de temp1
+    pres.toCharArray(envio4, str_len4);             // convierto el envio3 en arreglo y del largo de temp1
     client.publish("/grupo6/invernadero/BMP280_P/", envio4); // publico en el broker el topico y el arreglo 
     Serial.print(envio4); 
-    lcd.setCursor(0,2);                          // publico en el serial
+    lcd.setCursor(0,2);                             // publico en el serial
     lcd.print("hPa: ");
-    lcd.print(envio4);  
-
+    lcd.print(envio4);
 
     if (digitalRead(flotante)==1){
-    client.publish("/grupo6/invernadero/deposito/","100");
+    client.publish("/grupo6/invernadero/deposito/","1");
     }else{
-    client.publish("/grupo6/invernadero/deposito/","40");
+    client.publish("/grupo6/invernadero/deposito/","0");
     }
 
-
-    if (digitalRead(detector)==1){
-    client.publish("/grupo6/invernadero/detectorA/","1");       
+    if (digitalRead(detector)==0){
+        client.publish("/grupo6/invernadero/detectorA/","0");  
+        Serial.println("Agua NO"); 
+        lcd.setCursor(12,2);                          // publico en el serial
+        lcd.println("Agua: NO");     
     }else{
-    client.publish("/grupo6/invernadero/detectorA/","0");        
+        client.publish("/grupo6/invernadero/detectorA/","1");
+        Serial.println("Agua SI");                               
+        lcd.setCursor(12,2);                          // publico en el serial
+        lcd.println("Agua: SI");             
     }
 
-
-
-
-
+    if (digitalRead(bomba) == 0){
+        client.publish("/grupo6/invernadero/bomba/","0");
+        Serial.println("Bomba NO"); 
+        lcd.setCursor(0,3);                          // publico en el serial
+        lcd.println("Bomba: APAGADA");
+    }else{
+        client.publish("/grupo6/invernadero/bomba/","1");
+        Serial.println("Bomba SI"); 
+        lcd.setCursor(0,3);                          // publico en el serial
+        lcd.println("Bomba: ENCENDIDA");
+    }
 
         if (!client.connected())                     // si la conexion esta negada reconecto
-         reconnect();
-         delay(5000);
+        reconnect();
+        delay(5000);
 }
 
 void callback(char *topic, byte *payload, unsigned int length)
@@ -162,11 +171,11 @@ void callback(char *topic, byte *payload, unsigned int length)
 
 void reconnect()
 {
-    while (!client.connected()){                // si la conexion esta negada reconecto
-        String clientId = "Grupo6";             // genero el usuario
-        clientId += String(random(0xffff), HEX);// genero parte del usuario random
+    while (!client.connected()){                    // si la conexion esta negada reconecto
+        String clientId = "Grupo6";                 // genero el usuario
+        clientId += String(random(0xffff), HEX);    // genero parte del usuario random
         if (client.connect(clientId.c_str())){}     
-        delay(5000);                            // demora de la conexion
+        delay(5000);                                // demora de la conexion
     }
 }
 
