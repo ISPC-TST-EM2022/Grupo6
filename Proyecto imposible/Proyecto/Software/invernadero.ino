@@ -11,27 +11,36 @@
 #include <Adafruit_BMP280.h>    // incluimos libreria de adafruit para sensor BMP280
 #include <DHT.h>                // incluimos libreria de DHT11
 #include <LiquidCrystal_I2C.h>  // incluimos libreria de LCD 20x4 I2C
-#include <Ticker.h>
+#include <Ticker.h>             // incluimos libreria de temporizacion por software timer  
+#include <NTPClient.h>          // incluimos libreria de NTPClient
+#include <WiFiUdp.h>            // incluimos libreria de WiFiUdp
 
-const char *ssid = "TP-LINK_B33E";                // red de wifi a la que me conecto
-const char *password = "50868155";                // password de la red de wifi
+const char *ssid = "TP-LINK_B33E";                  // red de wifi a la que me conecto
+const char *password = "50868155";                  // password de la red de wifi
 
 const char *mqtt_server = "mgalarmasserver1.ddns.net"; // dns del server mosquitto (MQTT)
 unsigned int mqtt_port = 1883;                      // socket port del server MQTT Mosquitto
 const char *Topico = "/Grupo6/invernadero/";        // topico para publicar los datos en el server
-int flotante=33;
-int bomba= 27;
-int detector= 4;
+int flotante=33;                                    // variable para flotante
+int bomba= 27;                                      // variable para bomba
+int detector= 4;                                    // variable para detector
+String flota="";                                    // variable para flota para BD
+String detec="";
+String pump="";
+String fecha="";
+String hora="";
 #define DHTPIN 26 
-#define DHTTYPE DHT11           // DHT 11
-DHT dht(DHTPIN, DHTTYPE);
-
-LiquidCrystal_I2C lcd(0x27,20,4);
+#define DHTTYPE DHT11                               // definimos el tipo de sensor DHT 11
+DHT dht(DHTPIN, DHTTYPE);                           // definimos el tipo de ght y sus pines
+LiquidCrystal_I2C lcd(0x27,20,4);                   // objeto de LCD i2c
 Adafruit_BMP280 bmp;                                // creamos el objeto bmp
 Ticker timer;                                       // Temporizador
-
 WiFiClient esp32_Client;                            // creacion de objeto wifi client
 PubSubClient client(esp32_Client);                  // creacion de objeto pubsunclient
+WiFiUDP ntpUDP;                                     // obejto udp para la hora
+NTPClient timeClient(ntpUDP, "ntp.ign.gob.ar", -10800, 8000);//objeto del server Hora
+
+
 
 void ICACHE_RAM_ATTR controlarBomba(){
     digitalWrite(bomba, !digitalRead(bomba));
@@ -44,7 +53,11 @@ void ICACHE_RAM_ATTR controlarBomba(){
 }
 
 void ICACHE_RAM_ATTR bd_mysql(){
-// aca va el sql de guarda en BD mysql
+    String carga_bd = fecha+hora+temp1+temp2+hume+pres+flota+detec+pump;// Genero la carga para payload BD
+    int str_len_bd = temp1.length() + 1;              // cargo el largo del carga a una variable
+    char envio_bd[str_len_bd];                        // cargo el largo de la payload en el arreglo
+    carga_bd.toCharArray(envio_db, str_len_bd);       // convierto la carga en arreglo y del largo delpayload
+    client.publish("/grupo6/invernadero/BD/",envio_bd); // publico en el broker el topico y el arreglo 
  }
 
 void setup(){
@@ -129,21 +142,26 @@ void loop(){
     lcd.print(envio4);
 
     if (digitalRead(flotante)==1){
-    client.publish("/grupo6/invernadero/deposito/","1");
+        client.publish("/grupo6/invernadero/deposito/","1");
+        flota="SI";
     }else{
-    client.publish("/grupo6/invernadero/deposito/","0");
+        client.publish("/grupo6/invernadero/deposito/","0");
+        flota="NO";
     }
 
     if (digitalRead(detector)==0){
         client.publish("/grupo6/invernadero/detectorA/","0");  
         Serial.println("Agua NO"); 
         lcd.setCursor(12,2);                          // publico en el serial
-        lcd.println("Agua: NO");     
+        lcd.println("Agua: NO");
+        detec = "NO";
+
     }else{
         client.publish("/grupo6/invernadero/detectorA/","1");
         Serial.println("Agua SI");                               
         lcd.setCursor(12,2);                          // publico en el serial
-        lcd.println("Agua: SI");             
+        lcd.println("Agua: SI"); 
+        detec = "SI";            
     }
 
     if (digitalRead(bomba) == 0){
@@ -151,11 +169,13 @@ void loop(){
         Serial.println("Bomba NO"); 
         lcd.setCursor(0,3);                          // publico en el serial
         lcd.println("Bomba: APAGADA");
+        pump = "NO";
     }else{
         client.publish("/grupo6/invernadero/bomba/","1");
         Serial.println("Bomba SI"); 
         lcd.setCursor(0,3);                          // publico en el serial
         lcd.println("Bomba: ENCENDIDA");
+        pump="SI";
     }
 
         if (!client.connected())                     // si la conexion esta negada reconecto
