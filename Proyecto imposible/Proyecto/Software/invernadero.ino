@@ -15,10 +15,8 @@
 #include <NTPClient.h>          // incluimos libreria de NTPClient
 #include <WiFiUdp.h>            // incluimos libreria de WiFiUdp
 
-//const char *ssid = "TP-LINK_B33E";                  // red de wifi a la que me conecto
-//const char *password = "50868155";                  // password de la red de wifi
-const char *ssid = "MGAlarmas";                  // red de wifi a la que me conecto
-const char *password = "mgalarmas3040";                  // password de la red de wifi
+const char *ssid = "TP-LINK_B33E";                  // red de wifi a la que me conecto
+const char *password = "50868155";                  // password de la red de wifi
 
 
 const char *mqtt_server = "mgalarmasserver1.ddns.net"; // dns del broker mosquitto (MQTT)
