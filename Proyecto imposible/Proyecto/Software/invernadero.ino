@@ -18,18 +18,18 @@
 const char *ssid = "TP-LINK_B33E";                  // red de wifi a la que me conecto
 const char *password = "50868155";                  // password de la red de wifi
 
-const char *mqtt_server = "mgalarmasserver1.ddns.net"; // dns del server mosquitto (MQTT)
+const char *mqtt_server = "mgalarmasserver1.ddns.net"; // dns del broker mosquitto (MQTT)
 unsigned int mqtt_port = 1883;                      // socket port del server MQTT Mosquitto
 const char *Topico = "/Grupo6/invernadero/";        // topico para publicar los datos en el server
 int flotante=33;                                    // variable para flotante
 int bomba= 27;                                      // variable para bomba
 int detector= 4;                                    // variable para detector
 String flota="";                                    // variable para flota para BD
-String detec="";
-String pump="";
-String fecha="";
-String hora="";
-#define DHTPIN 26 
+String detec="";                                    // variable para detector de agua en el caño
+String pump="";                                     // variable para manejar la bomba
+String fecha="";                                    // variable para fecha actual
+String hora="";                                     // variable para hora actual
+#define DHTPIN 26                                   // determino que pin es el DHT11
 #define DHTTYPE DHT11                               // definimos el tipo de sensor DHT 11
 DHT dht(DHTPIN, DHTTYPE);                           // definimos el tipo de ght y sus pines
 LiquidCrystal_I2C lcd(0x27,20,4);                   // objeto de LCD i2c
@@ -42,17 +42,17 @@ NTPClient timeClient(ntpUDP, "ntp.ign.gob.ar", -10800, 8000);//objeto del server
 
 
 
-void ICACHE_RAM_ATTR controlarBomba(){
-    digitalWrite(bomba, !digitalRead(bomba));
-    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
-    if (digitalRead(bomba) == 0){
-        client.publish("/grupo6/invernadero/bomba/","0");
+void ICACHE_RAM_ATTR controlarBomba(){              // Inicia interupcion para encender/apagar la bomba
+    digitalWrite(bomba, !digitalRead(bomba));       // Cambio estado del pin que maneja la bomba
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));//Cambio el estado del led azul del NODEMCU
+    if (digitalRead(bomba) == 0){                   // verifico el estado del pin que maneja la bomba
+        client.publish("/grupo6/invernadero/bomba/","0");// envio al broker si esta en 0
     }else{
-        client.publish("/grupo6/invernadero/bomba/","1");
+        client.publish("/grupo6/invernadero/bomba/","1");// envio al broker s
     }
 }
 
-void ICACHE_RAM_ATTR bd_mysql(){
+void ICACHE_RAM_ATTR bd_mysql(){                    // Inicia interupcion para GUARDAR EN bd_mysql
     String carga_bd = fecha+hora+temp1+temp2+hume+pres+flota+detec+pump;// Genero la carga para payload BD
     int str_len_bd = temp1.length() + 1;              // cargo el largo del carga a una variable
     char envio_bd[str_len_bd];                        // cargo el largo de la payload en el arreglo
@@ -104,7 +104,7 @@ void loop(){
     client.publish("/grupo6/invernadero/DHT11_T/",envio1); // publico en el broker el topico y el arreglo 
     Serial.print(envio1);                           // publico en el serial
     lcd.setCursor(0,0);                             // posicionamos el cursor    
-    lcd.print("T:");
+    lcd.print("T:");                                // imprimimos en el lcd una T
     lcd.print(envio1);                              // imprimimos
 
     float t2 = bmp.readTemperature();               // adquirimos temperatura del BMP280
@@ -115,7 +115,7 @@ void loop(){
     client.publish("/grupo6/invernadero/BMP280_T/", envio3); // publico en el broker el topico y el arreglo 
     Serial.print(envio3);                           // publico en el serial
     lcd.setCursor(8,0);                             // posicionamos el cursor    
-    lcd.print("T:");
+    lcd.print("T:");                                // imprimimos en el lcd una T
     lcd.print(envio3);                              // imprimimos
 
     float h = dht.readHumidity();                   // adquirimos humedad del DHT11
@@ -136,32 +136,31 @@ void loop(){
     char envio4[str_len4];                          // cargo el largo de la temperatura en al arreglo
     pres.toCharArray(envio4, str_len4);             // convierto el envio3 en arreglo y del largo de temp1
     client.publish("/grupo6/invernadero/BMP280_P/", envio4); // publico en el broker el topico y el arreglo 
-    Serial.print(envio4); 
-    lcd.setCursor(0,2);                             // publico en el serial
-    lcd.print("hPa: ");
-    lcd.print(envio4);
+    Serial.print(envio4);                           // publico en el serial
+    lcd.setCursor(0,2);                             // posiciono el cursor del LCD
+    lcd.print("hPa: ");                             // imprimimos en el LCD hPA
+    lcd.print(envio4);                              // imprimimos en el LCD la presion
 
-    if (digitalRead(flotante)==1){
-        client.publish("/grupo6/invernadero/deposito/","1");
-        flota="SI";
+    if (digitalRead(flotante)==1){                  // condicional para verificar estado del flotante
+        client.publish("/grupo6/invernadero/deposito/","1");// publico en el broker el estado del flotante
+        flota="SI";                                 // cargo variable con el string SI para enviar a la BD
     }else{
-        client.publish("/grupo6/invernadero/deposito/","0");
-        flota="NO";
+        client.publish("/grupo6/invernadero/deposito/","0");// publico en el broker el estado del flotante
+        flota="NO";                                 // cargo variable con el string NO para enviar a la BD
     }
 
-    if (digitalRead(detector)==0){
+    if (digitalRead(detector)==0){                  // condicional para verificar estado del detector
         client.publish("/grupo6/invernadero/detectorA/","0");  
-        Serial.println("Agua NO"); 
-        lcd.setCursor(12,2);                          // publico en el serial
-        lcd.println("Agua: NO");
-        detec = "NO";
-
+        Serial.println("Agua NO");                  // publico en el serial
+        lcd.setCursor(12,2);                        // posiciono el cursor del LCD
+        lcd.println("Agua: NO");                    // imprimimos en el LCD 
+        detec = "NO";                               // cargo variable con el string NO para enviar a la BD
     }else{
         client.publish("/grupo6/invernadero/detectorA/","1");
-        Serial.println("Agua SI");                               
-        lcd.setCursor(12,2);                          // publico en el serial
-        lcd.println("Agua: SI"); 
-        detec = "SI";            
+        Serial.println("Agua SI");                  // publico en el serial                                
+        lcd.setCursor(12,2);                        // posiciono el cursor del LCD
+        lcd.println("Agua: SI");                    // imprimimos en el LCD
+        detec = "SI";                               // cargo variable con el string SI para enviar a la BD
     }
 
     if (digitalRead(bomba) == 0){
@@ -177,7 +176,6 @@ void loop(){
         lcd.println("Bomba: ENCENDIDA");
         pump="SI";
     }
-
         if (!client.connected())                     // si la conexion esta negada reconecto
         reconnect();
         delay(5000);
@@ -194,21 +192,20 @@ void reconnect()
     while (!client.connected()){                    // si la conexion esta negada reconecto
         String clientId = "Grupo6";                 // genero el usuario
         clientId += String(random(0xffff), HEX);    // genero parte del usuario random
-        if (client.connect(clientId.c_str())){}     
+        if (client.connect(clientId.c_str())){}     // conecto con el cliente mas random
         delay(5000);                                // demora de la conexion
     }
 }
 
 void bienvenido(){
-    lcd.backlight();                            // Encendemos el backlight
-    lcd.clear();                                // limpiamos el lcd
-    lcd.setCursor(0,0);                         // posicionamos el cursor    
-    lcd.print("Grupo 6");                       // imprimimos
-    lcd.setCursor(0,1);                         // posicionamos el cursor 
-    lcd.print("Proyecto Imposible");            // imprimimos
-    lcd.setCursor(0,2);                         // posicionamos el cursor
-    lcd.print("Invernadero");                   // imprimimos
-    lcd.setCursor(0,3);                         // posicionamos el cursor
-    lcd.print("Hidroponico");                   // imprimimos
-
+    lcd.backlight();                                // Encendemos el backlight
+    lcd.clear();                                    // limpiamos el lcd
+    lcd.setCursor(0,0);                             // posicionamos el cursor    
+    lcd.print("Grupo 6");                           // imprimimos
+    lcd.setCursor(0,1);                             // posicionamos el cursor 
+    lcd.print("Proyecto Imposible");                // imprimimos
+    lcd.setCursor(0,2);                             // posicionamos el cursor
+    lcd.print("Invernadero");                       // imprimimos
+    lcd.setCursor(0,3);                             // posicionamos el cursor
+    lcd.print("Hidroponico");                       // imprimimos
 }
