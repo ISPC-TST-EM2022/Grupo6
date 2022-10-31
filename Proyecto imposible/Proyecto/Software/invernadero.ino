@@ -15,8 +15,11 @@
 #include <NTPClient.h>          // incluimos libreria de NTPClient
 #include <WiFiUdp.h>            // incluimos libreria de WiFiUdp
 
-const char *ssid = "TP-LINK_B33E";                  // red de wifi a la que me conecto
-const char *password = "50868155";                  // password de la red de wifi
+//const char *ssid = "TP-LINK_B33E";                  // red de wifi a la que me conecto
+//const char *password = "50868155";                  // password de la red de wifi
+const char *ssid = "MGAlarmas";                  // red de wifi a la que me conecto
+const char *password = "mgalarmas3040";                  // password de la red de wifi
+
 
 const char *mqtt_server = "mgalarmasserver1.ddns.net"; // dns del broker mosquitto (MQTT)
 unsigned int mqtt_port = 1883;                      // socket port del server MQTT Mosquitto
@@ -24,11 +27,12 @@ const char *Topico = "/Grupo6/invernadero/";        // topico para publicar los 
 int flotante=33;                                    // variable para flotante
 int bomba= 27;                                      // variable para bomba
 int detector= 4;                                    // variable para detector
-String flota="";                                    // variable para flota para BD
+String flota="";                                    // variable para flota BD
 String detec="";                                    // variable para detector de agua en el caño
 String pump="";                                     // variable para manejar la bomba
 String fecha="";                                    // variable para fecha actual
 String hora="";                                     // variable para hora actual
+String minutos="";                                  // variable para minutos actual
 #define DHTPIN 26                                   // determino que pin es el DHT11
 #define DHTTYPE DHT11                               // definimos el tipo de sensor DHT 11
 DHT dht(DHTPIN, DHTTYPE);                           // definimos el tipo de ght y sus pines
@@ -48,17 +52,13 @@ void ICACHE_RAM_ATTR controlarBomba(){              // Inicia interupcion para e
     if (digitalRead(bomba) == 0){                   // verifico el estado del pin que maneja la bomba
         client.publish("/grupo6/invernadero/bomba/","0");// envio al broker si esta en 0
     }else{
-        client.publish("/grupo6/invernadero/bomba/","1");// envio al broker s
+        client.publish("/grupo6/invernadero/bomba/","1");// envio al broker si esta en 1
     }
 }
 
-void ICACHE_RAM_ATTR bd_mysql(){                    // Inicia interupcion para GUARDAR EN bd_mysql
-    String carga_bd = fecha+hora+temp1+temp2+hume+pres+flota+detec+pump;// Genero la carga para payload BD
-    int str_len_bd = temp1.length() + 1;              // cargo el largo del carga a una variable
-    char envio_bd[str_len_bd];                        // cargo el largo de la payload en el arreglo
-    carga_bd.toCharArray(envio_db, str_len_bd);       // convierto la carga en arreglo y del largo delpayload
-    client.publish("/grupo6/invernadero/BD/",envio_bd); // publico en el broker el topico y el arreglo 
- }
+ void ICACHE_RAM_ATTR bd_mysql(){                    // Inicia interupcion para GUARDAR EN bd_mysql
+
+}
 
 void setup(){
     pinMode(flotante,INPUT_PULLUP);                 // declaro el pin del flotante como entrada
@@ -70,7 +70,8 @@ void setup(){
     dht.begin();                                    // inicio el DHT11
     bmp.begin(BMP280_ADDRESS_ALT, BMP280_CHIPID);   // iniciamos el objeto sensor en la direccion alterna 0x77
     lcd.init();                                     // Inicializo el LCD I2C
-    bienvenido();
+    timeClient.begin();                             // inicializo el objeto del servidor de fecha y hora 
+    bienvenido();                                   // Mensaje de bievenida en el LCD
      while (WiFi.status() != WL_CONNECTED)          // inicio conexion
       {   
           delay(1500);                              // demora para reintentar
@@ -90,7 +91,7 @@ void setup(){
     client.setServer(mqtt_server, mqtt_port);       // estableco conexion al server mwtt (ISPC)
     // client.setCallback(callback);                // inicio el callback de server mqtt y espero datos
     timer.attach(300,controlarBomba); //900         // tiempo de espera en segundos, enciende la bomba
-    timer.attach(300,bd_mysql);                     // tiempo de espera en segundos, guarda bd mysql
+    timer.attach(10,bd_mysql);                     // tiempo de espera en segundos, guarda bd mysql
     lcd.clear();                                    // limpiamos el lcd
 }
 
@@ -209,3 +210,5 @@ void bienvenido(){
     lcd.setCursor(0,3);                             // posicionamos el cursor
     lcd.print("Hidroponico");                       // imprimimos
 }
+
+
