@@ -1,0 +1,20 @@
+SENSOR DE NIVEL DE LÍQUIDO 5CSA-P45
+NC (Normal Cerrado)
+
+NA (Normal Abierto)
+
+Potencia máxima de contacto: 10 W
+
+Voltaje de conmutación máximo: 220 V (RMS)
+
+Corriente de conmutación máxima: 0.5A
+
+Corriente máxima de transporte: 1.0A
+
+Resistencia de contacto máxima: 100 mohm
+
+Temperatura nominal:-10 + 60
+
+Material de la bola flotante: P.P
+
+Material corporal flotante: P.P
